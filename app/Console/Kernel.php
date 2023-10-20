@@ -17,11 +17,19 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->job(new SyncLilNounTotalSupply)->everyFiveMinutes();
-        $schedule->job(new SyncLilNounTokenIdentities)->everyFiveMinutes();
-        $schedule->job(new SyncLilNounTokenImages)->everyFiveMinutes();
-        $schedule->job(new SyncLilNounTokenSeeds)->everyFiveMinutes();
-        $schedule->job(new SyncLilNounTokenSeedNames)->everyFiveMinutes();
+        if (config('app.env') == 'local') {
+            $schedule->job(new SyncLilNounTotalSupply)->everyMinute();
+            $schedule->job(new SyncLilNounTokenIdentities)->everyMinute();
+            $schedule->job(new SyncLilNounTokenImages)->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeeds)->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeedNames)->everyMinute();
+        } else {
+            $schedule->job(new SyncLilNounTotalSupply)->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenIdentities)->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenImages)->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenSeeds)->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenSeedNames)->everyFiveMinutes();
+        }
     }
 
     /**
