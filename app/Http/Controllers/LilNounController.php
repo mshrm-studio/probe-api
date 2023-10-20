@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateLilNounRequest;
 use App\Models\LilNoun;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Http\Resources\LilNounResource;
 
 class LilNounController extends Controller
 {
@@ -15,7 +16,7 @@ class LilNounController extends Controller
      */
     public function index(Request $request): View
     {
-        $search = $request->search ?? null;
+        $search = is_string($request->search) ? explode(',', $request->search) : null;
         $accessory = $request->accessory ?? null;
         $body = $request->body ?? null;
         $glasses = $request->glasses ?? null;
@@ -23,16 +24,30 @@ class LilNounController extends Controller
         $background = $request->background ?? null;
 
         $lilNouns = LilNoun::query()
-            ->when(is_string($search), function ($query) use ($search) {
+            ->when(is_array($search), function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
-                    $query
-                        ->where('background_name', 'like', '%' . $search . '%')
-                        ->orWhere('head_name', 'like', '%' . $search . '%')
-                        ->orWhere('accessory_name', 'like', '%' . $search . '%')
-                        ->orWhere('body_name', 'like', '%' . $search . '%')
-                        ->orWhere('glasses_name', 'like', '%' . $search . '%');
+                    foreach ($search as $term) {
+                        $query->orWhere(function ($subQuery) use ($term) {
+                            $subQuery
+                                ->where('background_name', 'like', '%' . $term . '%')
+                                ->orWhere('head_name', 'like', '%' . $term . '%')
+                                ->orWhere('accessory_name', 'like', '%' . $term . '%')
+                                ->orWhere('body_name', 'like', '%' . $term . '%')
+                                ->orWhere('glasses_name', 'like', '%' . $term . '%');
+                        });
+                    }
                 });
             })
+            // ->when(is_string($search), function ($query) use ($search) {
+            //     $query->where(function ($query) use ($search) {
+            //         $query
+            //             ->where('background_name', 'like', '%' . $search . '%')
+            //             ->orWhere('head_name', 'like', '%' . $search . '%')
+            //             ->orWhere('accessory_name', 'like', '%' . $search . '%')
+            //             ->orWhere('body_name', 'like', '%' . $search . '%')
+            //             ->orWhere('glasses_name', 'like', '%' . $search . '%');
+            //     });
+            // })
             ->when(is_string($accessory), function ($query) use ($accessory) {
                 $query->where('accessory_name', $accessory);
             })
@@ -48,7 +63,15 @@ class LilNounController extends Controller
             ->when(is_string($background), function ($query) use ($background) {
                 $query->where('background_name', $background);
             })
-            ->paginate(100);
+            ->paginate(
+                is_numeric($request->per_page) && $request->per_page >= 1 && $request->per_page <= 100
+                    ? $request->per_page
+                    : 25
+            );
+
+        if ($request->expectsJson()) {
+            return LilNounResource::collection($lilNouns);
+        }
         
         return view('welcome', ['lilNouns' => $lilNouns]);
     }

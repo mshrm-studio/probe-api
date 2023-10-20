@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Lil Nouns Explorer</title>
+        @viteReactRefresh
+        @vite(['resources/css/app.css', 'resources/js/app.tsx'])
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -12,6 +14,8 @@
     </head>
 
     <body class="antialiased">
+        <nav id="lil-noun-list-filters"></nav>
+
         <ul style="display:flex;flex-wrap:wrap;">
             @foreach ($lilNouns as $lilNoun)
                 <li style="display:flex;margin-bottom:20px;margin-right:20px;">
