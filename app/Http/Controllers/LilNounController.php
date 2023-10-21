@@ -8,13 +8,14 @@ use App\Models\LilNoun;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Http\Resources\LilNounResource;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class LilNounController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request): AnonymousResourceCollection|View
     {
         $search = is_string($request->search) ? explode(',', $request->search) : null;
         $accessory = $request->accessory ?? null;
@@ -24,6 +25,13 @@ class LilNounController extends Controller
         $background = $request->background ?? null;
 
         $lilNouns = LilNoun::query()
+            ->whereNotNull('background_name')
+            ->whereNotNull('head_name')
+            ->whereNotNull('body_name')
+            ->whereNotNull('accessory_name')
+            ->whereNotNull('glasses_name')
+            ->whereNotNull('token_id')
+            ->whereNotNull('token_uri')
             ->when(is_array($search), function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     foreach ($search as $term) {
