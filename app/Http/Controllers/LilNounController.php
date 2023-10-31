@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetLilNounsRequest;
 use App\Http\Requests\StoreLilNounRequest;
 use App\Http\Requests\UpdateLilNounRequest;
 use App\Models\LilNoun;
@@ -15,7 +16,7 @@ class LilNounController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): AnonymousResourceCollection|View
+    public function index(GetLilNounsRequest $request): AnonymousResourceCollection|View
     {
         $search = is_string($request->search) ? explode(',', $request->search) : null;
         $accessory = $request->accessory ?? null;
@@ -46,16 +47,6 @@ class LilNounController extends Controller
                     }
                 });
             })
-            // ->when(is_string($search), function ($query) use ($search) {
-            //     $query->where(function ($query) use ($search) {
-            //         $query
-            //             ->where('background_name', 'like', '%' . $search . '%')
-            //             ->orWhere('head_name', 'like', '%' . $search . '%')
-            //             ->orWhere('accessory_name', 'like', '%' . $search . '%')
-            //             ->orWhere('body_name', 'like', '%' . $search . '%')
-            //             ->orWhere('glasses_name', 'like', '%' . $search . '%');
-            //     });
-            // })
             ->when(is_string($accessory), function ($query) use ($accessory) {
                 $query->where('accessory_name', $accessory);
             })
