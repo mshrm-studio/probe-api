@@ -29,6 +29,7 @@ class SyncLilNounTokenSeeds implements ShouldQueue
     public function handle(): void
     {
         $lilNouns = LilNoun::query()
+            ->whereNotNull('token_id')
             ->whereNull('background_index')
             ->orWhereNull('body_index')
             ->orWhereNull('accessory_index')
