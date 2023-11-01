@@ -24,11 +24,11 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncLilNounTokenSeeds)->everyMinute();
             $schedule->job(new SyncLilNounTokenSeedNames)->everyMinute();
         } else {
-            $schedule->job(new SyncLilNounTotalSupply)->hourly();
-            $schedule->job(new SyncLilNounTokenIdentities)->hourly();
-            $schedule->job(new SyncLilNounTokenImages)->hourly();
-            $schedule->job(new SyncLilNounTokenSeeds)->hourly();
-            $schedule->job(new SyncLilNounTokenSeedNames)->hourly();
+            $schedule->job(new SyncLilNounTotalSupply)->every5Minutes();
+            $schedule->job(new SyncLilNounTokenIdentities)->every5Minutes();
+            $schedule->job(new SyncLilNounTokenImages)->every5Minutes();
+            $schedule->job(new SyncLilNounTokenSeeds)->every5Minutes();
+            $schedule->job(new SyncLilNounTokenSeedNames)->every5Minutes();
         }
     }
 
