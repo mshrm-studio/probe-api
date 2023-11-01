@@ -37,7 +37,11 @@ class SyncLilNounTotalSupply implements ShouldQueue
 
         // \Log::info('SyncTotalSupply handle(): ', ['existingIndices' => $existingIndices]);
 
-        $allIndices = range(0, $totalSupply);
+        // -1
+        // ... total supply of 7166
+        // ... do not want to get tokenByIndex of 7166
+        // ... does not exist
+        $allIndices = range(0, $totalSupply - 1);
 
         $missingIndices = array_diff($allIndices, $existingIndices);
 
