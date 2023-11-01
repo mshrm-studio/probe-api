@@ -63,7 +63,7 @@ class LilNounController extends Controller
                 $query->where('background_name', $background);
             })
             ->paginate(
-                is_numeric($request->per_page) && $request->per_page >= 1 && $request->per_page <= 100
+                is_numeric($request->per_page) && $request->per_page >= 1 && $request->per_page <= 120
                     ? $request->per_page
                     : 25
             );
