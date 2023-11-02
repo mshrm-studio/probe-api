@@ -4,8 +4,9 @@ namespace App\Services;
 
 use Illuminate\Support\Collection;
 
-class TraitService {
-    public function getItems(): Collection {
+class NounsTraitService {
+    public function getItems(): Collection 
+    {
         return collect([
             [ "layer" => "background", "seed_id" => 0, "name" => "d5d7e1" ],
             [ "layer" => "background", "seed_id" => 1, "name" => "e1d7d5" ],
@@ -148,12 +149,9 @@ class TraitService {
             [ "layer" => "accessory", "seed_id" => 136, "name" => "body-ice-cold" ],
             [ "layer" => "accessory", "seed_id" => 137, "name" => "accessory-grease" ],
             [ "layer" => "accessory", "seed_id" => 138, "name" => "accessory-tatewaku" ],
-            [ "layer" => "accessory", "seed_id" => 139, "name" => "accessory-broken-heart" ],
-            [ "layer" => "accessory", "seed_id" => 140, "name" => "accessory-sweater" ],
-            [ "layer" => "accessory", "seed_id" => 141, "name" => "accessory-uroko" ],
-            [ "layer" => "accessory", "seed_id" => 142, "name" => "accessory-grease" ],
-            [ "layer" => "accessory", "seed_id" => 143, "name" => "accessory-tatewaku" ],
-            [ "layer" => "accessory", "seed_id" => 144, "name" => "accessory-uroko" ],
+            [ "layer" => "accessory", "seed_id" => 139, "name" => "accessory-uroko" ],
+            [ "layer" => "accessory", "seed_id" => 140, "name" => "accessory-broken-heart" ],
+            [ "layer" => "accessory", "seed_id" => 141, "name" => "accessory-sweater" ],
             [ "layer" => "body", "seed_id" => 0, "name" => "body-bege-bsod" ],
             [ "layer" => "body", "seed_id" => 1, "name" => "body-bege-crt" ],
             [ "layer" => "body", "seed_id" => 2, "name" => "body-blue-sky" ],
@@ -456,7 +454,7 @@ class TraitService {
             [ "layer" => "glasses", "seed_id" => 19, "name" => "glasses-square-yellow-orange-multi" ],
             [ "layer" => "glasses", "seed_id" => 20, "name" => "glasses-square-yellow-saturated" ],
             [ "layer" => "glasses", "seed_id" => 21, "name" => "glasses-deep-teal" ],
-            [ "layer" => "glasses", "seed_id" => 22, "name" => "glasses-grass" ]
+            [ "layer" => "glasses", "seed_id" => 22, "name" => "glasses-grass" ],
         ]);
     }
 }

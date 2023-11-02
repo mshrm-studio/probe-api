@@ -3,7 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Services\TraitService;
+use App\Services\LilNounsTraitService;
 use Illuminate\Validation\Rule;
 
 class GetLilNounsRequest extends FormRequest

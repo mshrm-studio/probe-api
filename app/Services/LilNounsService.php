@@ -26,7 +26,7 @@ class LilNounsService {
 
         $this->contract = new Contract($web3->provider, json_encode($abi));
         // \Log::info('__construct, contract');
-        $contractAddress = config('services.contract.address');
+        $contractAddress = config('services.lil_nouns_contract.address');
         // \Log::info('__construct, contractAddress: ' . $contractAddress);
         $this->contract->at($contractAddress);
         // \Log::info('__construct, contract->at()');

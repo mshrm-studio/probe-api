@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\LilNoun;
-use App\Services\TraitService;
+use App\Services\LilNounsTraitService;
 
 class SyncLilNounTokenSeedNames implements ShouldQueue
 {
