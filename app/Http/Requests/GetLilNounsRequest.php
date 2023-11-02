@@ -23,7 +23,7 @@ class GetLilNounsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $traitService = new TraitService();
+        $traitService = new LilNounsTraitService();
 
         $traits = $traitService->getItems();
 

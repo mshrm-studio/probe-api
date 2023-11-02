@@ -26,7 +26,7 @@ class SyncLilNounTokenSeedNames implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(TraitService $traitService): void
+    public function handle(LilNounsTraitService $traitService): void
     {
         $lilNouns = LilNoun::query()
             ->whereNull('background_name')
