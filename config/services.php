@@ -17,6 +17,10 @@ return [
         'address' => env('LIL_NOUNS_CONTRACT_ADDRESS')
     ],
 
+    'nouns_contract' => [
+        'address' => env('NOUNS_CONTRACT_ADDRESS')
+    ],
+
     'infura' => [
         'url' => env('INFURA_URL')
     ],
