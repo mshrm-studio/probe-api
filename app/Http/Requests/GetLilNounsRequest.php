@@ -52,6 +52,14 @@ class GetLilNounsRequest extends FormRequest
                 'sometimes',
                 'string',
                 'max:191'
+            ],
+            'sort_property' => [
+                'sometimes',
+                'in:minted_at,token_id',
+            ],
+            'sort_method' => [
+                'sometimes',
+                'in:asc,desc'
             ]
         ];
     }

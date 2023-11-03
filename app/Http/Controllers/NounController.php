@@ -24,6 +24,8 @@ class NounController extends Controller
         $glasses = $request->glasses ?? null;
         $head = $request->head ?? null;
         $background = $request->background ?? null;
+        $sortProperty = $request->sort_property ?? 'minted_at';
+        $sortMethod = $request->sort_method ?? 'desc';
 
         $nouns = Noun::query()
             ->whereNotNull('background_name')
@@ -64,6 +66,7 @@ class NounController extends Controller
             ->when(is_string($background), function ($query) use ($background) {
                 $query->where('background_name', $background);
             })
+            ->orderBy($sortProperty, $sortMethod)
             ->paginate(
                 is_numeric($request->per_page) && $request->per_page >= 1 && $request->per_page <= 120
                     ? $request->per_page
