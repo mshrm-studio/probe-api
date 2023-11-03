@@ -4,11 +4,18 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Jobs\SyncLilNounTotalSupply;
-use App\Jobs\SyncLilNounTokenIdentities;
-use App\Jobs\SyncLilNounTokenImages;
-use App\Jobs\SyncLilNounTokenSeeds;
-use App\Jobs\SyncLilNounTokenSeedNames;
+use App\Jobs\LilNoun\SyncLilNounTotalSupply;
+use App\Jobs\LilNoun\SyncLilNounTokenIdentities;
+use App\Jobs\LilNoun\SyncLilNounTokenImages;
+use App\Jobs\LilNoun\SyncLilNounTokenSeeds;
+use App\Jobs\LilNoun\SyncLilNounTokenSeedNames;
+use App\Jobs\LilNoun\SyncLilNounTokenBlockNumbers;
+use App\Jobs\LilNoun\SyncLilNounTokenMintTimes;
+use App\Jobs\Noun\SyncNounTotalSupply;
+use App\Jobs\Noun\SyncNounTokenIdentities;
+use App\Jobs\Noun\SyncNounTokenImages;
+use App\Jobs\Noun\SyncNounTokenSeeds;
+use App\Jobs\Noun\SyncNounTokenSeedNames;
 
 class Kernel extends ConsoleKernel
 {
@@ -18,17 +25,37 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         if (config('app.env') == 'local') {
-            $schedule->job(new SyncLilNounTotalSupply)->everyMinute();
-            $schedule->job(new SyncLilNounTokenIdentities)->everyMinute();
-            $schedule->job(new SyncLilNounTokenImages)->everyMinute();
-            $schedule->job(new SyncLilNounTokenSeeds)->everyMinute();
-            $schedule->job(new SyncLilNounTokenSeedNames)->everyMinute();
+            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyMinute();
+
+            // $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenImages, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenSeedNames, 'nouns')->everyMinute();
+            // $schedule->job(new SyncLilNounTokenBlockNumbers, 'nouns')->everyMinute();
+            // $schedule->job(new SyncLilNounTokenMintTimes, 'nouns')->everyMinute();
         } else {
-            $schedule->job(new SyncLilNounTotalSupply)->hourly();
-            $schedule->job(new SyncLilNounTokenIdentities)->hourly();
-            $schedule->job(new SyncLilNounTokenImages)->hourly();
-            $schedule->job(new SyncLilNounTokenSeeds)->hourly();
-            $schedule->job(new SyncLilNounTokenSeedNames)->hourly();
+            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyFiveMinutes();
+            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyFiveMinutes();
+
+            // $schedule->job(new SyncNounTotalSupply, 'nouns')->hourly();
+            // $schedule->job(new SyncNounTokenIdentities, 'nouns')->hourly();
+            // $schedule->job(new SyncNounTokenImages, 'nouns')->hourly();
+            // $schedule->job(new SyncNounTokenSeeds, 'nouns')->hourly();
+            // $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
+            // $schedule->job(new SyncLilNounTokenBlockNumbers, 'nouns')->hourly();
+            // $schedule->job(new SyncLilNounTokenMintTimes, 'nouns')->hourly();
         }
     }
 

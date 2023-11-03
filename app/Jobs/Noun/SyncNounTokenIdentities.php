@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Noun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -8,10 +8,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Jobs\UpdateLilNounTokenURI;
-use App\Models\LilNoun;
+use App\Models\Noun;
+use App\Jobs\Noun\UpdateNounTokenID;
 
-class SyncLilNounTokenImages implements ShouldQueue
+class SyncNounTokenIdentities implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -28,16 +28,14 @@ class SyncLilNounTokenImages implements ShouldQueue
      */
     public function handle(): void
     {
-        $lilNouns = LilNoun::query()
-            ->whereNull('token_uri')
-            ->whereNotNull('token_id')
+        $nouns = Noun::query()
+            ->whereNull('token_id')
+            ->whereNotNull('index')
             ->limit(25)
             ->get();
 
-        \Log::info('SyncTokenImages handle() for count(lilNouns): ' . count($lilNouns));
-
-        foreach ($lilNouns as $lilNoun) {
-            UpdateLilNounTokenURI::dispatch($lilNoun);
+        foreach ($nouns as $noun) {
+            UpdateNounTokenID::dispatch($noun)->onQueue('nouns');
         }
     }
 }

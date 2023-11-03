@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\LilNoun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -30,8 +30,6 @@ class CreateLilNounWithIndex implements ShouldQueue
     public function handle(): void
     {
         if (! LilNoun::where('index', $this->index)->exists()) {
-            // \Log::info('CreateLilNounWithIndex handle() Create LilNoun: ' . $this->index);
-
             $lilNoun = LilNoun::create(['index' => $this->index]);
         }
     }

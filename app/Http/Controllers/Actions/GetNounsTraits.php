@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Actions;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\GetLilNounsTraitsRequest;
-use App\Services\LilNounsTraitService;
+use App\Http\Requests\GetNounsTraitsRequest;
+use App\Services\NounsTraitService;
 use Illuminate\Http\JsonResponse;
 
-class GetLilNounsTraits extends Controller
+class GetNounsTraits extends Controller
 {
     /**
      * Handle the incoming request.
      */
-    public function __invoke(GetLilNounsTraitsRequest $request): JsonResponse
+    public function __invoke(GetNounsTraitsRequest $request): JsonResponse
     {
-        $traitService = new LilNounsTraitService();
+        $traitService = new NounsTraitService();
 
         $traits = $traitService->getItems();
 

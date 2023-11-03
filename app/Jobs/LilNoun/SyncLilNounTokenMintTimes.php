@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\LilNoun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -9,9 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\LilNoun;
-use App\Jobs\UpdateLilNounTokenID;
+use App\Jobs\LilNoun\UpdateLilNounTokenMintTime;
 
-class SyncLilNounTokenIdentities implements ShouldQueue
+class SyncLilNounTokenMintTimes implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,15 +29,13 @@ class SyncLilNounTokenIdentities implements ShouldQueue
     public function handle(): void
     {
         $lilNouns = LilNoun::query()
-            ->whereNull('token_id')
-            ->whereNotNull('index')
+            ->whereNull('minted_at')
+            ->whereNotNull('block_number')
             ->limit(25)
             ->get();
 
-        // \Log::info('SyncTokenIdentities handle() for count(lilNouns): ' . count($lilNouns));
-
         foreach ($lilNouns as $lilNoun) {
-            UpdateLilNounTokenID::dispatch($lilNoun);
+            UpdateLilNounTokenMintTime::dispatch($lilNoun)->onQueue('lils');
         }
     }
 }

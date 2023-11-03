@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Web3::class, function ($app) {
-            return new Web3(new HttpProvider(new HttpRequestManager(config('services.infura.url'), 2)));
+            return new Web3(new HttpProvider(new HttpRequestManager(config('services.infura.url'), 10)));
 
             // return new Web3(config('services.infura.url'));
         });

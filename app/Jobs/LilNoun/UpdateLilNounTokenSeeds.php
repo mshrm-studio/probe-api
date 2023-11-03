@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\LilNoun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\LilNoun;
 use App\Services\LilNounsService;
-use Illuminate\Support\Collection;
 
 class UpdateLilNounTokenSeeds implements ShouldQueue
 {
@@ -46,11 +45,7 @@ class UpdateLilNounTokenSeeds implements ShouldQueue
         );
 
         if ($hasAtLeastOneEmptySeed) {
-            // \Log::info('UpdateLilNounTokenSeeds handle(): ', ['$lilNoun->token_id' => $lilNoun->token_id]);
-
             $seeds = $service->getSeeds($lilNoun->token_id);
-
-            // \Log::info('UpdateLilNounTokenSeeds handle(): ', ['$seeds' => $seeds]);
 
             if (count($seeds) > 0) {
                 $lilNoun->update([

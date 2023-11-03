@@ -2,13 +2,16 @@
 
 namespace App\Services;
 
+use App\Contracts\ERC721ServiceContract;
+use App\Contracts\NounsServiceContract;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Web3\Web3;
 use Web3\Contract;
+use Web3\Utils;
 
-class LilNounsService {
+class LilNounsService implements ERC721ServiceContract, NounsServiceContract {
     protected $web3;
     protected $contract;
 
@@ -19,40 +22,78 @@ class LilNounsService {
 
         $abi = Cache::remember('lil-nouns-abi-v2', $seconds, function () {
             $abiUrl = Storage::url('lils/lil-nouns-contract-abi-v2.json');
-            // \Log::info('__construct, abiUrl: ' . $abiUrl);
             $response = Http::get($abiUrl);
             return $response->json();
         });
 
         $this->contract = new Contract($web3->provider, json_encode($abi));
-        // \Log::info('__construct, contract');
         $contractAddress = config('services.lil_nouns_contract.address');
-        // \Log::info('__construct, contractAddress: ' . $contractAddress);
         $this->contract->at($contractAddress);
-        // \Log::info('__construct, contract->at()');
+    }
+
+    public function getMintEvent(int $tokenId): array 
+    {
+        $mintEvent = [];
+
+        $filters = [
+            'fromBlock' => '0x0',  // Start searching from the first block
+            'toBlock' => 'latest', // Search until the latest block
+            'address' => config('services.lil_nouns_contract.address'), // The contract address
+            'topics' => [
+                Utils::sha3('Transfer(address,address,uint256)'), // This is the topic for the Transfer event
+                null, // The 'from' address, which is null for mint events (zero address)
+                null, // The 'to' address, which we're not filtering by
+                '0x' . str_pad(dechex($tokenId), 64, '0', STR_PAD_LEFT), // The token ID, padded to 32 bytes
+            ],
+        ];
+
+        $this->web3->eth->getLogs($filters, function ($err, $logs) use (&$mintEvent) {
+            if ($err) {
+                throw new \Exception($err->getMessage());
+            }
+
+            if (count($logs) > 0) {
+                $mintEvent = is_object($logs[0]) ? (array) $logs[0] : $logs[0];
+            }
+        });
+
+        if (empty($mintEvent)) {
+            throw new \Exception("No mint event found for token ID {$tokenId}");
+        }
+
+        return $mintEvent;
+    }
+
+    public function getBlock(string $blockNumber): array 
+    {
+        $blockDetails = [];
+
+        $this->web3->eth->getBlockByNumber($blockNumber, true, function ($err, $block) use (&$blockDetails) {
+            if ($err !== null) {
+                throw new \Exception($err->getMessage());
+            }
+
+            $blockDetails = is_object($block) ? (array) $block : $block;
+        });
+
+        return $blockDetails;
     }
 
     public function getTotalSupply(): int
     {
         $totalSupply = 0;
-        // \Log::info('getTotalSupply handle()');
 
         $this->contract->call('totalSupply', [], function ($err, $result) use (&$totalSupply) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
 
-            // \Log::info('getTotalSupply(), Total Supply Result:', ['result' => $result]);
-
             $resultBigInteger = $result[0] instanceof \phpseclib\Math\BigInteger ? $result[0] : null;
             
             if ($resultBigInteger) {
                 $totalSupply = (int) $resultBigInteger->toString();
-                // \Log::info('getTotalSupply(), Updated totalSupply:', ['totalSupply' => $totalSupply]);
             }
         });
-
-        // \Log::info('getTotalSupply(), returning $totalSupply');
 
         return $totalSupply;
     }
@@ -61,24 +102,17 @@ class LilNounsService {
     {
         $tokenId = null;
 
-        // \Log::info('getTokenByIndex() index type: ' . gettype($index));
-
         $this->contract->call('tokenByIndex', $index, function ($err, $result) use (&$tokenId) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
 
-            // \Log::info('getTokenByIndex(), Token ID Result:', ['result' => $result]);
-
             $resultBigInteger = $result[0] instanceof \phpseclib\Math\BigInteger ? $result[0] : null;
 
             if ($resultBigInteger) {
                 $tokenId = (int) $resultBigInteger->toString();
-                // \Log::info('getTokenByIndex(), Updated tokenId:', ['tokenId' => $tokenId]);
             }
         });
-
-        // \Log::info('getTokenByIndex(), returning $tokenId: ' . $tokenId);
 
         return $tokenId;
     }
@@ -87,23 +121,15 @@ class LilNounsService {
     {
         $tokenURI = null;
 
-        \Log::info('getTokenURI() tokenId: ' . gettype($tokenId));
-
         $this->contract->call('tokenURI', $tokenId, function ($err, $result) use (&$tokenURI) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
 
-            \Log::info('getTokenURI(), tokenURI Result:', ['result' => $result]);
-
-            \Log::info('gettype($result[0] ?? null):', ['type' => gettype($result[0] ?? null)]);
-
             if (gettype($result[0] ?? null) == 'string') {
                 $tokenURI = $result[0];
             }
         });
-
-        \Log::info('getTokenURI(), returning $tokenURI:', ['tokenURI' => $tokenURI]);
 
         return $tokenURI;
     }
@@ -112,28 +138,17 @@ class LilNounsService {
     {
         $seeds = [];
 
-        // \Log::info('getSeeds() tokenId: ' . gettype($tokenId));
-
         $this->contract->call('seeds', $tokenId, function ($err, $result) use (&$seeds) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
 
-            // \Log::info('getSeeds(), seeds Result:', ['result' => $result]);
-
             foreach ($result as $key => $value) {
-                // \Log::info('getSeeds(), seeds key/value:', [
-                //     'key' => $key,
-                //     'value' => $value
-                // ]);
-
                 if ($value instanceof \phpseclib\Math\BigInteger) {
                     $seeds[$key] = (int) $value->toString();
                 }
             }
         });
-
-        // \Log::info('getSeeds(), returning $seeds:', $seeds);
 
         return $seeds;
     }

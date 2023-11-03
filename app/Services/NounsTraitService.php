@@ -2,9 +2,10 @@
 
 namespace App\Services;
 
+use App\Contracts\NounsTraitServiceContract;
 use Illuminate\Support\Collection;
 
-class NounsTraitService {
+class NounsTraitService implements NounsTraitServiceContract {
     public function getItems(): Collection 
     {
         return collect([

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\LilNoun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\LilNoun;
 use App\Services\LilNounsService;
 
-class UpdateLilNounTokenID implements ShouldQueue
+class UpdateLilNounTokenURI implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -32,15 +32,13 @@ class UpdateLilNounTokenID implements ShouldQueue
     {
         $lilNoun = LilNoun::findOrFail($this->lilNoun->id);
 
-        if (is_null($lilNoun->token_id) && is_int($lilNoun->index)) {
-            // \Log::info('UpdateLilNounTokenID handle(): ', ['$lilNoun->index' => $lilNoun->index]);
+        if (is_null($lilNoun->token_uri) && is_int($lilNoun->token_id)) {
+            $tokenUri = $service->getTokenURI($lilNoun->token_id);
 
-            $tokenId = $service->getTokenByIndex($lilNoun->index);
-
-            if (is_int($tokenId)) {
-                $lilNoun->update(['token_id' => $tokenId]);
+            if (is_string($tokenUri)) {
+                $lilNoun->update(['token_uri' => $tokenUri]);
             } else {
-                throw new \Exception('getTokenByIndex() job has not returned a numeric value.');
+                throw new \Exception('getTokenURI() job has not returned a string value.');
             }
         }
     }

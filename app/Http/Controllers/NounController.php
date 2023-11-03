@@ -2,21 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetLilNounsRequest;
-use App\Http\Requests\StoreLilNounRequest;
-use App\Http\Requests\UpdateLilNounRequest;
-use App\Models\LilNoun;
+use App\Http\Requests\GetNounsRequest;
+use App\Http\Requests\StoreNounRequest;
+use App\Http\Requests\UpdateNounRequest;
+use App\Models\Noun;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Http\Resources\LilNounResource;
+use App\Http\Resources\NounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class LilNounController extends Controller
+class NounController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(GetLilNounsRequest $request): AnonymousResourceCollection|View
+    public function index(GetNounsRequest $request): AnonymousResourceCollection|View
     {
         $search = is_string($request->search) ? explode(',', $request->search) : null;
         $accessory = $request->accessory ?? null;
@@ -25,7 +25,7 @@ class LilNounController extends Controller
         $head = $request->head ?? null;
         $background = $request->background ?? null;
 
-        $lilNouns = LilNoun::query()
+        $nouns = Noun::query()
             ->whereNotNull('background_name')
             ->whereNotNull('head_name')
             ->whereNotNull('body_name')
@@ -71,10 +71,10 @@ class LilNounController extends Controller
             );
 
         if ($request->expectsJson()) {
-            return LilNounResource::collection($lilNouns);
+            return NounResource::collection($nouns);
         }
         
-        return view('welcome', ['lilNouns' => $lilNouns]);
+        return view('welcome', ['nouns' => $nouns]);
     }
 
     /**
@@ -88,7 +88,7 @@ class LilNounController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreLilNounRequest $request)
+    public function store(StoreNounRequest $request)
     {
         //
     }
@@ -96,7 +96,7 @@ class LilNounController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(LilNoun $lilNoun)
+    public function show(Noun $noun)
     {
         //
     }
@@ -104,7 +104,7 @@ class LilNounController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(LilNoun $lilNoun)
+    public function edit(Noun $noun)
     {
         //
     }
@@ -112,7 +112,7 @@ class LilNounController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLilNounRequest $request, LilNoun $lilNoun)
+    public function update(UpdateNounRequest $request, Noun $noun)
     {
         //
     }
@@ -120,7 +120,7 @@ class LilNounController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(LilNoun $lilNoun)
+    public function destroy(Noun $noun)
     {
         //
     }

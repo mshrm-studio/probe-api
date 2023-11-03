@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\LilNoun;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Services\LilNounsService;
 use App\Models\LilNoun;
-use App\Jobs\CreateLilNounWithIndex;
+use App\Jobs\LilNoun\CreateLilNounWithIndex;
 
 class SyncLilNounTotalSupply implements ShouldQueue
 {
@@ -31,11 +31,7 @@ class SyncLilNounTotalSupply implements ShouldQueue
     {
         $totalSupply = $service->getTotalSupply();
 
-        // \Log::info('SyncTotalSupply handle() $totalSupply: ' . $totalSupply);
-
         $existingIndices = LilNoun::pluck('index')->all();
-
-        // \Log::info('SyncTotalSupply handle(): ', ['existingIndices' => $existingIndices]);
 
         // -1
         // ... total supply of 7166
@@ -45,18 +41,12 @@ class SyncLilNounTotalSupply implements ShouldQueue
 
         $missingIndices = array_diff($allIndices, $existingIndices);
 
-        // \Log::info('SyncTotalSupply handle(): ', ['missingIndices' => $missingIndices]);
-
         $numberOfMissingIndicesToProcess = 25;
 
         $missingIndicesToProcess = array_slice($missingIndices, 0, $numberOfMissingIndicesToProcess);
 
-        // \Log::info('SyncTotalSupply handle(): ', ['missingIndicesToProcess' => $missingIndicesToProcess]);
-
         foreach ($missingIndicesToProcess as $index) {
-            // \Log::info('SyncTotalSupply handle() dispatch: ' . $index);
-
-            CreateLilNounWithIndex::dispatch($index);
+            CreateLilNounWithIndex::dispatch($index)->onQueue('lils');
         }        
     }
 }
