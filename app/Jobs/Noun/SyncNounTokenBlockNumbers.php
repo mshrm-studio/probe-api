@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Noun;
-use App\Jobs\LilNoun\UpdateNounTokenBlockNumber;
+use App\Jobs\Noun\UpdateNounTokenBlockNumber;
 
 class SyncNounTokenBlockNumbers implements ShouldQueue
 {

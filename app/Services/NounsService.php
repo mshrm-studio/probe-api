@@ -15,8 +15,8 @@ class NounsService extends BaseNounsService {
 
         $seconds = 300;
 
-        $abi = Cache::remember('nouns-abi', $seconds, function () {
-            $abiUrl = Storage::url('nouns/nouns-contract-abi.json');
+        $abi = Cache::remember('nouns-abi-v2', $seconds, function () {
+            $abiUrl = Storage::url('nouns/nouns-contract-abi-v2.json');
             $response = Http::get($abiUrl);
             return $response->json();
         });
@@ -24,5 +24,7 @@ class NounsService extends BaseNounsService {
         $this->contract = new Contract($web3->provider, json_encode($abi));
         $this->contractAddress = config('services.nouns_contract.address');
         $this->contract->at($this->contractAddress);
+
+        \Log::info('contractAddress: ' . $this->contractAddress);
     }
 }

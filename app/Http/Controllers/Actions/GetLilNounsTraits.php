@@ -22,6 +22,6 @@ class GetLilNounsTraits extends Controller
             $traits = $traits->where('layer', $request->layer);
         }
 
-        return response()->json($traits->values());
+        return response()->json($traits->sortBy('name')->values());
     }
 }

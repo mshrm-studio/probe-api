@@ -24,7 +24,7 @@ class NounController extends Controller
         $glasses = $request->glasses ?? null;
         $head = $request->head ?? null;
         $background = $request->background ?? null;
-        $sortProperty = $request->sort_property ?? 'minted_at';
+        $sortProperty = $request->sort_property ?? 'token_id';
         $sortMethod = $request->sort_method ?? 'desc';
 
         $nouns = Noun::query()
