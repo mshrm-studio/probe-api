@@ -51,13 +51,13 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->hourly();
             $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->hourly();
 
-            $schedule->job(new SyncNounTotalSupply, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenImages, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenSeedNames, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->everyFiveMinutes();
-            $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyFiveMinutes();
+            $schedule->job(new SyncNounTotalSupply, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenIdentities, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenImages, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenSeeds, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenSeedNames, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->daily();
+            $schedule->job(new SyncNounTokenMintTimes, 'nouns')->daily();
         }
     }
 
