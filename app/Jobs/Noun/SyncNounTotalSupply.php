@@ -31,22 +31,26 @@ class SyncNounTotalSupply implements ShouldQueue
     {
         $totalSupply = $service->getTotalSupply();
 
-        $existingIndices = Noun::pluck('index')->all();
+        if ($totalSupply > 0) {
+            Noun::where('index', '>', $totalSupply - 1)->delete();
 
-        // -1
-        // ... total supply of 7166
-        // ... do not want to get tokenByIndex of 7166
-        // ... does not exist
-        $allIndices = range(0, $totalSupply - 1);
+            $existingIndices = Noun::pluck('index')->all();
 
-        $missingIndices = array_diff($allIndices, $existingIndices);
-
-        $numberOfMissingIndicesToProcess = 25;
-
-        $missingIndicesToProcess = array_slice($missingIndices, 0, $numberOfMissingIndicesToProcess);
-
-        foreach ($missingIndicesToProcess as $index) {
-            CreateNounWithIndex::dispatch($index)->onQueue('nouns');
-        }        
+            // -1
+            // ... total supply of 7166
+            // ... do not want to get tokenByIndex of 7166
+            // ... does not exist
+            $allIndices = range(0, $totalSupply - 1);
+    
+            $missingIndices = array_diff($allIndices, $existingIndices);
+    
+            $numberOfMissingIndicesToProcess = 25;
+    
+            $missingIndicesToProcess = array_slice($missingIndices, 0, $numberOfMissingIndicesToProcess);
+    
+            foreach ($missingIndicesToProcess as $index) {
+                CreateNounWithIndex::dispatch($index)->onQueue('nouns');
+            }       
+        }  
     }
 }
