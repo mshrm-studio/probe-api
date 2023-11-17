@@ -53,6 +53,9 @@ class UpdateLilNounTokenID implements ShouldQueue
                         'head_name' => null,
                         'body_index' => null,
                         'body_name' => null,
+                        'block_number' => null,
+                        'minted_at' => null,
+                        'token_uri' => null,
                         'token_id' => $tokenId,
                         'token_id_last_synced_at' => now()
                     ]);
