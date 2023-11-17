@@ -32,11 +32,14 @@ class UpdateLilNounTokenID implements ShouldQueue
     {
         $lilNoun = LilNoun::findOrFail($this->lilNoun->id);
 
-        if (is_null($lilNoun->token_id) && is_int($lilNoun->index)) {
+        if (is_int($lilNoun->index)) {
             $tokenId = $service->getTokenByIndex($lilNoun->index);
 
             if (is_int($tokenId)) {
-                $lilNoun->update(['token_id' => $tokenId]);
+                $lilNoun->update([
+                    'token_id' => $tokenId,
+                    'token_id_last_synced_at' => now()
+                ]);
             } else {
                 throw new \Exception('getTokenByIndex() job has not returned a numeric value.');
             }

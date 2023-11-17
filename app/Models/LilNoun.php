@@ -29,10 +29,12 @@ class LilNoun extends Model
         'head_name',
         'glasses_name',
         'block_number',
-        'minted_at'
+        'minted_at',
+        'token_id_last_synced_at'
     ];
 
     protected $casts = [
         'minted_at' => 'datetime',
+        'token_id_last_synced_at' => 'datetime'
     ];
 }

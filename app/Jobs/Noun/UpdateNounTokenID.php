@@ -32,11 +32,14 @@ class UpdateNounTokenID implements ShouldQueue
     {
         $noun = Noun::findOrFail($this->noun->id);
 
-        if (is_null($noun->token_id) && is_int($noun->index)) {
+        if (is_int($noun->index)) {
             $tokenId = $service->getTokenByIndex($noun->index);
 
             if (is_int($tokenId)) {
-                $noun->update(['token_id' => $tokenId]);
+                $noun->update([
+                    'token_id' => $tokenId,
+                    'token_id_last_synced_at' => now()
+                ]);
             } else {
                 throw new \Exception('getTokenByIndex() job has not returned a numeric value.');
             }

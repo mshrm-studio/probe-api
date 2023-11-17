@@ -29,7 +29,12 @@ class SyncLilNounTokenIdentities implements ShouldQueue
     public function handle(): void
     {
         $lilNouns = LilNoun::query()
-            ->whereNull('token_id')
+            ->where(function ($query) {
+                $query
+                    ->whereNull('token_id')
+                    ->orWhereNull('token_id_last_synced_at')
+                    ->orWhere('token_id_last_synced_at', '<', now()->subWeek());
+            })
             ->whereNotNull('index')
             ->limit(25)
             ->get();
