@@ -36,10 +36,27 @@ class UpdateLilNounTokenID implements ShouldQueue
             $tokenId = $service->getTokenByIndex($lilNoun->index);
 
             if (is_int($tokenId)) {
-                $lilNoun->update([
-                    'token_id' => $tokenId,
-                    'token_id_last_synced_at' => now()
-                ]);
+                if (is_null($lilNoun->token_id)) {
+                    $lilNoun->update([
+                        'token_id' => $tokenId,
+                        'token_id_last_synced_at' => now()
+                    ]);
+                } else if ($lilNoun->token_id != $tokenId) {
+                    $lilNoun->update([
+                        'background_index' => null,
+                        'background_name' => null,
+                        'accessory_index' => null,
+                        'accessory_name' => null,
+                        'glasses_index' => null,
+                        'glasses_name' => null,
+                        'head_index' => null,
+                        'head_name' => null,
+                        'body_index' => null,
+                        'body_name' => null,
+                        'token_id' => $tokenId,
+                        'token_id_last_synced_at' => now()
+                    ]);
+                }
             } else {
                 throw new \Exception('getTokenByIndex() job has not returned a numeric value.');
             }
