@@ -33,7 +33,7 @@ class UpdateNounTokenSeeds implements ShouldQueue
         $noun = Noun::findOrFail($this->noun->id);
 
         if (is_null($noun->token_id)) {
-            throw new \Exception('attempting to update token seeds for token without ID.');
+            throw new \Exception('attempting to update token seeds for token without ID. DB ID is ' . $noun->id);
         }
 
         $hasAtLeastOneEmptySeed = (

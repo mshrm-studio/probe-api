@@ -33,7 +33,7 @@ class UpdateLilNounTokenSeeds implements ShouldQueue
         $lilNoun = LilNoun::findOrFail($this->lilNoun->id);
 
         if (is_null($lilNoun->token_id)) {
-            throw new \Exception('attempting to update token seeds for token without ID.');
+            throw new \Exception('attempting to update token seeds for token without ID. DB ID is ' . $lilNoun->id);
         }
 
         $hasAtLeastOneEmptySeed = (

@@ -24,7 +24,5 @@ class NounsService extends BaseNounsService {
         $this->contract = new Contract($web3->provider, json_encode($abi));
         $this->contractAddress = config('services.nouns_contract.address');
         $this->contract->at($this->contractAddress);
-
-        \Log::info('contractAddress: ' . $this->contractAddress);
     }
 }

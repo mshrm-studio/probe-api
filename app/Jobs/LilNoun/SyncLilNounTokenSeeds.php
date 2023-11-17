@@ -30,11 +30,14 @@ class SyncLilNounTokenSeeds implements ShouldQueue
     {
         $lilNouns = LilNoun::query()
             ->whereNotNull('token_id')
-            ->whereNull('background_index')
-            ->orWhereNull('body_index')
-            ->orWhereNull('accessory_index')
-            ->orWhereNull('head_index')
-            ->orWhereNull('glasses_index')
+            ->where(function ($query) {
+                $query
+                    ->whereNull('background_index')
+                    ->orWhereNull('body_index')
+                    ->orWhereNull('accessory_index')
+                    ->orWhereNull('head_index')
+                    ->orWhereNull('glasses_index');
+            })
             ->limit(25)
             ->get();
 
