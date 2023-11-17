@@ -56,6 +56,10 @@ class UpdateNounTokenID implements ShouldQueue
                         'token_id' => $tokenId,
                         'token_id_last_synced_at' => now()
                     ]);
+                } else {
+                    $noun->update([
+                        'token_id_last_synced_at' => now()
+                    ]);
                 }
             } else {
                 throw new \Exception('getTokenByIndex() job has not returned a numeric value.');
