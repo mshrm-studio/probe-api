@@ -31,7 +31,7 @@ class SyncNounTokenMintTimes implements ShouldQueue
         $nouns = Noun::query()
             ->whereNull('minted_at')
             ->whereNotNull('block_number')
-            ->limit(25)
+            ->limit(50)
             ->get();
 
         foreach ($nouns as $noun) {

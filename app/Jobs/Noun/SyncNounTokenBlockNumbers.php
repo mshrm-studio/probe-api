@@ -31,7 +31,7 @@ class SyncNounTokenBlockNumbers implements ShouldQueue
         $nouns = Noun::query()
             ->whereNull('block_number')
             ->whereNotNull('token_id')
-            ->limit(25)
+            ->limit(50)
             ->get();
 
         foreach ($nouns as $noun) {

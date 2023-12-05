@@ -36,7 +36,7 @@ class SyncLilNounTokenIdentities implements ShouldQueue
                     ->orWhere('token_id_last_synced_at', '<', now()->subWeek());
             })
             ->whereNotNull('index')
-            ->limit(25)
+            ->limit(50)
             ->get();
 
         foreach ($lilNouns as $lilNoun) {

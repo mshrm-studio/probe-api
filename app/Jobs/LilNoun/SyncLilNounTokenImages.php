@@ -31,7 +31,7 @@ class SyncLilNounTokenImages implements ShouldQueue
         $lilNouns = LilNoun::query()
             ->whereNull('token_uri')
             ->whereNotNull('token_id')
-            ->limit(25)
+            ->limit(50)
             ->get();
 
         foreach ($lilNouns as $lilNoun) {
