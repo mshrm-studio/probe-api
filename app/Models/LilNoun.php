@@ -30,7 +30,8 @@ class LilNoun extends Model
         'glasses_name',
         'block_number',
         'minted_at',
-        'token_id_last_synced_at'
+        'token_id_last_synced_at',
+        'svg_path'
     ];
 
     protected $casts = [

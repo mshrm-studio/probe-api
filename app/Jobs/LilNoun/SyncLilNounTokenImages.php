@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Jobs\LilNoun\UpdateLilNounTokenURI;
+use App\Jobs\LilNoun\UpdateLilNounTokenSvg;
 use App\Models\LilNoun;
 
 class SyncLilNounTokenImages implements ShouldQueue
@@ -36,6 +37,16 @@ class SyncLilNounTokenImages implements ShouldQueue
 
         foreach ($lilNouns as $lilNoun) {
             UpdateLilNounTokenURI::dispatch($lilNoun)->onQueue('lils');
+        }
+
+        $lilNounsWithoutSvg = Noun::query()
+            ->whereNull('svg_path')
+            ->whereNotNull('token_uri')
+            ->limit(50)
+            ->get();
+
+        foreach ($lilNounsWithoutTokenUri as $lilNoun) {
+            UpdateLilNounTokenSvg::dispatch($lilNoun)->onQueue('nouns');
         }
     }
 }
