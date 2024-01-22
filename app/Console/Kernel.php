@@ -18,6 +18,7 @@ use App\Jobs\Noun\SyncNounTokenSeeds;
 use App\Jobs\Noun\SyncNounTokenSeedNames;
 use App\Jobs\Noun\SyncNounTokenBlockNumbers;
 use App\Jobs\Noun\SyncNounTokenMintTimes;
+use App\Jobs\Noun\SyncNounTokenColors;
 
 class Kernel extends ConsoleKernel
 {
@@ -35,13 +36,14 @@ class Kernel extends ConsoleKernel
             // $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyMinute();
             // $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyMinute();
 
-            $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenImages, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenSeedNames, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->everyMinute();
-            $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenImages, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenSeedNames, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
         } else {
             $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyTenMinutes();
             $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyTenMinutes();
@@ -58,6 +60,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
         }
     }
 
