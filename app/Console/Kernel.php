@@ -46,11 +46,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyMinute();
             $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
         }
-        else if (config('app.env') == 'staging')
-        {
-            //
-        }
-        else if (config('app.env') == 'production') 
+        else
         {
             $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyTenMinutes();
             $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyTenMinutes();
