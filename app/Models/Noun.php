@@ -31,11 +31,15 @@ class Noun extends Model
         'block_number',
         'minted_at',
         'token_id_last_synced_at',
-        'svg_path'
+        'svg_path',
+        'color_histogram',
+        'weight',
+        'area'
     ];
 
     protected $casts = [
         'minted_at' => 'datetime',
-        'token_id_last_synced_at' => 'datetime'
+        'token_id_last_synced_at' => 'datetime',
+        'color_histogram' => 'array'
     ];
 }
