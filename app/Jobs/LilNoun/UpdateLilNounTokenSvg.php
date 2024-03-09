@@ -51,7 +51,9 @@ class UpdateLilNounTokenSvg implements ShouldQueue
             $svgContent = $svgData;
         }
 
-        $filePath = 'lils/svgs/' . $noun->token_id . '.svg';
+        $filePath = config('app.env') == 'production'
+            ? 'lils/svgs/' . $noun->token_id . '.svg'
+            : 'staging/lils/svgs/' . $noun->token_id . '.svg';
 
         Storage::put($filePath, $svgContent);
 
