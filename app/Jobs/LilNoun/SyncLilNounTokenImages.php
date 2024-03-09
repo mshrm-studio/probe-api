@@ -45,7 +45,7 @@ class SyncLilNounTokenImages implements ShouldQueue
             ->limit(50)
             ->get();
 
-        foreach ($lilNounsWithoutTokenUri as $lilNoun) {
+        foreach ($lilNounsWithoutSvg as $lilNoun) {
             UpdateLilNounTokenSvg::dispatch($lilNoun)->onQueue('lils');
         }
     }

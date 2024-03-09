@@ -45,7 +45,7 @@ class SyncNounTokenImages implements ShouldQueue
             ->limit(50)
             ->get();
 
-        foreach ($nounsWithoutTokenUri as $noun) {
+        foreach ($nounsWithoutSvg as $noun) {
             UpdateNounTokenSvg::dispatch($noun)->onQueue('nouns');
         }
     }
