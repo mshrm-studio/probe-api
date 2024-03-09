@@ -39,14 +39,14 @@ class SyncLilNounTokenImages implements ShouldQueue
             UpdateLilNounTokenURI::dispatch($lilNoun)->onQueue('lils');
         }
 
-        $lilNounsWithoutSvg = Noun::query()
+        $lilNounsWithoutSvg = LilNoun::query()
             ->whereNull('svg_path')
             ->whereNotNull('token_uri')
             ->limit(50)
             ->get();
 
         foreach ($lilNounsWithoutTokenUri as $lilNoun) {
-            UpdateLilNounTokenSvg::dispatch($lilNoun)->onQueue('nouns');
+            UpdateLilNounTokenSvg::dispatch($lilNoun)->onQueue('lils');
         }
     }
 }
