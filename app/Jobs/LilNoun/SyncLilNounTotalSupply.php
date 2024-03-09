@@ -49,7 +49,11 @@ class SyncLilNounTotalSupply implements ShouldQueue
             $missingIndicesToProcess = array_slice($missingIndices, 0, $numberOfMissingIndicesToProcess);
     
             foreach ($missingIndicesToProcess as $index) {
-                CreateLilNounWithIndex::dispatch($index)->onQueue('lils');
+                if (config('app.env') == 'production') {
+                    CreateLilNounWithIndex::dispatch($index)->onQueue('lils');
+                } else if ($index < 100) {
+                    CreateLilNounWithIndex::dispatch($index)->onQueue('lils');
+                }
             }
         }        
     }

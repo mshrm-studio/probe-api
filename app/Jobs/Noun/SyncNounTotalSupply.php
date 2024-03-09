@@ -49,7 +49,11 @@ class SyncNounTotalSupply implements ShouldQueue
             $missingIndicesToProcess = array_slice($missingIndices, 0, $numberOfMissingIndicesToProcess);
     
             foreach ($missingIndicesToProcess as $index) {
-                CreateNounWithIndex::dispatch($index)->onQueue('nouns');
+                if (config('app.env') == 'production') {
+                    CreateNounWithIndex::dispatch($index)->onQueue('nouns');
+                } else if ($index < 100) {
+                    CreateNounWithIndex::dispatch($index)->onQueue('nouns');
+                }
             }       
         }  
     }
