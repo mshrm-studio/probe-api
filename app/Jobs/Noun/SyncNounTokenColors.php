@@ -30,6 +30,9 @@ class SyncNounTokenColors implements ShouldQueue
     {
         $nouns = Noun::query()
             ->whereNotNull('svg_path')
+            ->whereNull('area')
+            ->whereNull('color_histogram')
+            ->whereNull('weight')
             ->limit(50)
             ->get();
 
@@ -42,32 +45,24 @@ class SyncNounTokenColors implements ShouldQueue
             
             $imagick->setImageFormat('png24');
 
-            // Get background colour to ignore
             $backgroundColor = $this->getBackgroundColor($svgContent);
                                 
-            // Process the noun to get histogram/area
             $histogram = $imagick->getImageHistogram();
 
-            // Get area
             $area = $this->calculateArea($histogram, $backgroundColor);
             
-            // Get the weight
             $weight = $this->calculateWeight($histogram, $backgroundColor);
 
-            // Build response object and return
-            $nounStats = [];
-            $nounStats['histogram'] = $this->formatHistogram($histogram);
-            $nounStats['area'] = $area;
-            $nounStats['weight'] = $weight;
+            $formattedHistogram = $this->formatHistogram($histogram);
 
             // Release memory
             $imagick->clear();
             $imagick->destroy();
 
             $noun->update([
-                'area' => $nounStats['area'],
-                'color_histogram' => $nounStats['histogram'],
-                'weight' => $nounStats['weight'],
+                'area' => $area,
+                'color_histogram' => $formattedHistogram,
+                'weight' => $weight,
             ]);
         }   
     }
