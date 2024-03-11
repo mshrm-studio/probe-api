@@ -142,7 +142,23 @@ class SyncNounTokenColors implements ShouldQueue
 
     private function convertHexToRGB(string $hexColor): array
     {
-        sscanf($hexColor, "rgb(%d,%d,%d)", $r, $g, $b);
+        // Strip '#' if it's present
+        $hexColor = ltrim($hexColor, '#');
+
+        // Parse the hex color string
+        if (strlen($hexColor) == 6) {
+            list($r, $g, $b) = sscanf($hexColor, "%02x%02x%02x");
+        } else if (strlen($hexColor) == 3) {
+            // In case of a 3-character hex code
+            list($r, $g, $b) = sscanf($hexColor, "%01x%01x%01x");
+
+            // Double the digits for shorthand hex color
+            $r = $r * 17;
+            $g = $g * 17;
+            $b = $b * 17;
+        } else {
+            throw new \Exception('SyncNounTokenColors, convertHexToRGB(): Invalid hex color');
+        }
 
         return ['r' => $r, 'g' => $g, 'b' => $b];
     }
