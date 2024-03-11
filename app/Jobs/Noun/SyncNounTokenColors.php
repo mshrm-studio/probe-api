@@ -37,6 +37,9 @@ class SyncNounTokenColors implements ShouldQueue
             ->get();
 
         foreach ($nouns as $noun) {
+            \Log::info('*********************');
+            \Log::info('SyncNounTokenColors, token_id: ' . $noun->token_id);
+
             $imagick = new \Imagick();
 
             $svgContent = Storage::get($noun->svg_path);
@@ -45,13 +48,15 @@ class SyncNounTokenColors implements ShouldQueue
             
             $imagick->setImageFormat('png24');
 
-            $backgroundColor = $this->getBackgroundColor($svgContent);
+            $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
+            \Log::info('backgroundColorHex: ' . $backgroundColorHex);
                                 
             $histogram = $imagick->getImageHistogram();
+            \Log::info('histogram: ' . json_encode($histogram));
 
-            $area = $this->calculateArea($histogram, $backgroundColor);
+            $area = $this->calculateArea($histogram, $backgroundColorHex);
             
-            $weight = $this->calculateWeight($histogram, $backgroundColor);
+            $weight = $this->calculateWeight($histogram, $backgroundColorHex);
 
             $formattedHistogram = $this->formatHistogram($histogram);
 
@@ -60,22 +65,26 @@ class SyncNounTokenColors implements ShouldQueue
             $imagick->destroy();
 
             $noun->update([
-                'area' => $area,
+                'area' => $area, // out of 102,400
                 'color_histogram' => $formattedHistogram,
-                'weight' => $weight,
+                'weight' => $weight, // out of 26,112,000
             ]);
         }   
     }
 
     private function calculateArea(array $histogram, string $backgroundColor): int
     {
+        \Log::info('calculateArea()');
+
         $area = 0;
 
         $backgroundColorRGB = $this->convertHexToRGB($backgroundColor);
+        \Log::info('backgroundColorRGB: ' . json_encode($backgroundColorRGB));
         
         // Iterate over histogram and add all pixels that aren't background color
         foreach ($histogram as $pixel) {
             $colorRGB = $pixel->getColor();
+            \Log::info('colorRGB: ' . json_encode($colorRGB));
             
             if (
                 $colorRGB['r'] != $backgroundColorRGB['r'] && 
@@ -91,13 +100,17 @@ class SyncNounTokenColors implements ShouldQueue
 
     private function calculateWeight(array $histogram, string $backgroundColor): int
     {
+        \Log::info('calculateWeight()');
+
         $weight = 0;
 
         $backgroundColorRGB = $this->convertHexToRGB($backgroundColor);
+        \Log::info('backgroundColorRGB: ' . json_encode($backgroundColorRGB));
 
         // Iterate over histogram and add all pixels that aren't background color
         foreach ($histogram as $pixel) {
             $colorRGB = $pixel->getColor();
+            \Log::info('colorRGB: ' . json_encode($colorRGB));
 
             if (
                 $colorRGB['r'] != $backgroundColorRGB['r'] && 
@@ -115,7 +128,7 @@ class SyncNounTokenColors implements ShouldQueue
         return $weight;
     }
 
-    private function getBackgroundColor(string $svg): string 
+    private function getBackgroundColorHex(string $svg): string 
     {
         // LoadXML
         $xml = simplexml_load_string($svg);
@@ -123,6 +136,7 @@ class SyncNounTokenColors implements ShouldQueue
         // Get 100% fill color
         $backgroundElement = $xml->rect[0];
 
+        // EG #e1d7d5
         return $backgroundElement["fill"];
     }
 
