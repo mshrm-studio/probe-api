@@ -37,9 +37,6 @@ class SyncNounTokenColors implements ShouldQueue
             ->get();
 
         foreach ($nouns as $noun) {
-            \Log::info('*********************');
-            \Log::info('SyncNounTokenColors, token_id: ' . $noun->token_id);
-
             $imagick = new \Imagick();
 
             $svgContent = Storage::get($noun->svg_path);
@@ -49,10 +46,8 @@ class SyncNounTokenColors implements ShouldQueue
             $imagick->setImageFormat('png24');
 
             $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
-            \Log::info('backgroundColorHex: ' . $backgroundColorHex);
                                 
             $histogram = $imagick->getImageHistogram();
-            \Log::info('histogram: ' . json_encode($histogram));
 
             $area = $this->calculateArea($histogram, $backgroundColorHex);
             
@@ -74,17 +69,13 @@ class SyncNounTokenColors implements ShouldQueue
 
     private function calculateArea(array $histogram, string $backgroundColor): int
     {
-        \Log::info('calculateArea()');
-
         $area = 0;
 
         $backgroundColorRGB = $this->convertHexToRGB($backgroundColor);
-        \Log::info('backgroundColorRGB: ' . json_encode($backgroundColorRGB));
         
         // Iterate over histogram and add all pixels that aren't background color
         foreach ($histogram as $pixel) {
             $colorRGB = $pixel->getColor();
-            \Log::info('colorRGB: ' . json_encode($colorRGB));
             
             if (
                 $colorRGB['r'] != $backgroundColorRGB['r'] && 
@@ -100,17 +91,13 @@ class SyncNounTokenColors implements ShouldQueue
 
     private function calculateWeight(array $histogram, string $backgroundColor): int
     {
-        \Log::info('calculateWeight()');
-
         $weight = 0;
 
         $backgroundColorRGB = $this->convertHexToRGB($backgroundColor);
-        \Log::info('backgroundColorRGB: ' . json_encode($backgroundColorRGB));
 
         // Iterate over histogram and add all pixels that aren't background color
         foreach ($histogram as $pixel) {
             $colorRGB = $pixel->getColor();
-            \Log::info('colorRGB: ' . json_encode($colorRGB));
 
             if (
                 $colorRGB['r'] != $backgroundColorRGB['r'] && 
