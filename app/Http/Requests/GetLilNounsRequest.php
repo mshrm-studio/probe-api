@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Services\LilNounsTraitService;
 use Illuminate\Validation\Rule;
 
 class GetLilNounsRequest extends FormRequest
@@ -23,30 +22,32 @@ class GetLilNounsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $traitService = new LilNounsTraitService();
-
-        $traits = $traitService->getItems();
-
         return [
             'accessory' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'accessory')->pluck('name'))
+                'exists:lil_noun_traits,name'
             ],
             'background' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'background')->pluck('name'))
+                'exists:lil_noun_traits,name'
             ],
             'body' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'body')->pluck('name'))
+                'exists:lil_noun_traits,name'
             ],
             'glasses' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'glasses')->pluck('name'))
+                'exists:lil_noun_traits,name'
             ],
             'head' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'head')->pluck('name'))
+                'exists:lil_noun_traits,name'
+            ],
+            'per_page' => [
+                'sometimes',
+                'integer',
+                'min:1',
+                'max:300'
             ],
             'search' => [
                 'sometimes',

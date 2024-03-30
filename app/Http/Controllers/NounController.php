@@ -18,14 +18,16 @@ class NounController extends Controller
      */
     public function index(GetNounsRequest $request): AnonymousResourceCollection|View
     {
+        $accessory = $request->input('accessory', null);
+        $body = $request->input('body', null);
+        $glasses = $request->input('glasses', null);
+        $head = $request->input('head', null);
+        $background = $request->input('background', null);
+
         $search = is_string($request->search) ? explode(',', $request->search) : null;
-        $accessory = $request->accessory ?? null;
-        $body = $request->body ?? null;
-        $glasses = $request->glasses ?? null;
-        $head = $request->head ?? null;
-        $background = $request->background ?? null;
-        $sortProperty = $request->sort_property ?? 'token_id';
-        $sortMethod = $request->sort_method ?? 'desc';
+        $perPage = $request->input('per_page', 25);
+        $sortProperty = $request->input('sort_property', 'token_id');
+        $sortMethod = $request->input('sort_method', 'desc');
 
         $nouns = Noun::query()
             ->whereNotNull('background_name')
@@ -67,11 +69,7 @@ class NounController extends Controller
                 $query->where('background_name', $background);
             })
             ->orderBy($sortProperty, $sortMethod)
-            ->paginate(
-                is_numeric($request->per_page) && $request->per_page >= 1 && $request->per_page <= 120
-                    ? $request->per_page
-                    : 25
-            );
+            ->paginate($perPage);
 
         if ($request->expectsJson()) {
             return NounResource::collection($nouns);

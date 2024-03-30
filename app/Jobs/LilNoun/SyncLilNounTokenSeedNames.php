@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\LilNoun;
-use App\Services\LilNounsTraitService;
+use App\Models\LilNounTrait;
 
 class SyncLilNounTokenSeedNames implements ShouldQueue
 {
@@ -26,7 +26,7 @@ class SyncLilNounTokenSeedNames implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(LilNounsTraitService $traitService): void
+    public function handle(): void
     {
         $lilNouns = LilNoun::query()
             ->whereNull('background_name')
@@ -37,7 +37,7 @@ class SyncLilNounTokenSeedNames implements ShouldQueue
             ->limit(50)
             ->get();
             
-        $traits = $traitService->getItems();
+        $traits = LilNounTrait::all();
 
         foreach ($lilNouns as $lilNoun) {
             if (is_null($lilNoun->head_name) && is_int($lilNoun->head_index)) {

@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetLilNounsTraitsRequest extends FormRequest
+class StoreNounTraitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,10 +22,7 @@ class GetLilNounsTraitsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'layer' => [
-                'sometimes',
-                'in:body,accessory,glasses,head,background'
-            ]
+            //
         ];
     }
 }

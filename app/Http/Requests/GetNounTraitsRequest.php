@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetNounsTraitsRequest extends FormRequest
+class GetNounTraitsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,6 +25,25 @@ class GetNounsTraitsRequest extends FormRequest
             'layer' => [
                 'sometimes',
                 'in:body,accessory,glasses,head,background'
+            ],
+            'per_page' => [
+                'sometimes',
+                'integer',
+                'min:1',
+                'max:300'
+            ],
+            'search' => [
+                'sometimes',
+                'string',
+                'max:191'
+            ],
+            'sort_property' => [
+                'sometimes',
+                'in:name',
+            ],
+            'sort_method' => [
+                'sometimes',
+                'in:asc,desc'
             ]
         ];
     }

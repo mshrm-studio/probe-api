@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class GetNounsRequest extends FormRequest
+class GetLilNounTraitsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,25 +22,9 @@ class GetNounsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'accessory' => [
+            'layer' => [
                 'sometimes',
-                'exists:noun_traits,name'
-            ],
-            'background' => [
-                'sometimes',
-                'exists:noun_traits,name'
-            ],
-            'body' => [
-                'sometimes',
-                'exists:noun_traits,name'
-            ],
-            'glasses' => [
-                'sometimes',
-                'exists:noun_traits,name'
-            ],
-            'head' => [
-                'sometimes',
-                'exists:noun_traits,name'
+                'in:body,accessory,glasses,head,background'
             ],
             'per_page' => [
                 'sometimes',
@@ -56,7 +39,7 @@ class GetNounsRequest extends FormRequest
             ],
             'sort_property' => [
                 'sometimes',
-                'in:minted_at,token_id',
+                'in:name',
             ],
             'sort_method' => [
                 'sometimes',
