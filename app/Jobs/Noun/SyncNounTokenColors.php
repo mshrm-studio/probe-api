@@ -36,9 +36,7 @@ class SyncNounTokenColors implements ShouldQueue
             ->limit(50)
             ->get();
 
-        foreach ($nouns as $noun) {
-            \Log::info('Processing noun: ' . $noun->svg_path);
-            
+        foreach ($nouns as $noun) {          
             $imagick = new \Imagick();
 
             $svgContent = Storage::get($noun->svg_path);
