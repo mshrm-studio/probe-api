@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Actions\GetLilNounByTokenId;
 use App\Http\Controllers\Actions\GetNounByTokenId;
+use App\Http\Controllers\Actions\GetNounColors;
 use App\Http\Controllers\LilNounController;
 use App\Http\Controllers\LilNounTraitController;
 use App\Http\Controllers\NounController;
@@ -31,4 +32,5 @@ Route::get('lil-noun-traits', [LilNounTraitController::class, 'index']);
 
 Route::get('nouns', [NounController::class, 'index']);
 Route::get('nouns/{token_id}', GetNounByTokenId::class);
+Route::get('noun-colors', GetNounColors::class);
 Route::get('noun-traits', [NounTraitController::class, 'index']);

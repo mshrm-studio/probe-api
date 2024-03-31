@@ -35,6 +35,10 @@ class GetLilNounsRequest extends FormRequest
                 'sometimes',
                 'exists:lil_noun_traits,name'
             ],
+            'color' => [
+                'sometimes',
+                'string'
+            ],
             'glasses' => [
                 'sometimes',
                 'exists:lil_noun_traits,name'

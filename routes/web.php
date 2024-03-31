@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\LilNounController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +13,6 @@ use App\Http\Controllers\LilNounController;
 |
 */
 
-Route::get('/', [LilNounController::class, 'index']);
+// Route::get('/', function() {
+//     return phpinfo();
+// });
