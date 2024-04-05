@@ -40,6 +40,8 @@ Route::get('/warpcast-frames/probe', function () {
 });
 
 Route::get('/warpcast-frames/random-noun', function () {
+    \Log::info(request()->all());
+
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
     $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
@@ -50,6 +52,8 @@ Route::get('/warpcast-frames/random-noun', function () {
 });
 
 Route::post('/warpcast-frames/random-noun', function () {
+    \Log::info(request()->all());
+
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
     $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
