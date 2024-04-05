@@ -30,8 +30,6 @@ class SyncNounTokenImages implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenImages job started.');
-
         $nounsWithoutTokenUri = Noun::query()
             ->whereNull('token_uri')
             ->whereNotNull('token_id')
@@ -57,8 +55,6 @@ class SyncNounTokenImages implements ShouldQueue
             ->whereNotNull('svg_path')
             ->limit(50)
             ->get();
-
-        \Log::info('nounsWithoutPng:', count($nounsWithoutPng));
 
         foreach ($nounsWithoutPng as $noun) {
             UpdateNounTokenPng::dispatch($noun)->onQueue('nouns');
