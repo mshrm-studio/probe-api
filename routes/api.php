@@ -94,14 +94,12 @@ Route::get('/warpcast-frames/noun-catalogue', function () {
     ]);
 });
 
-Route::post('/warpcast-frames/next-noun', function (Request $request) {
+Route::post('/warpcast-frames/next-noun', function (int $currentNounTokenId) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
-
-    $currentNounTokenId = $request->input('noun');
 
     if ($currentNounTokenId === null || ! is_numeric($currentNounTokenId)) {
         throw new \Exception('Invalid Noun');
@@ -132,14 +130,12 @@ Route::post('/warpcast-frames/next-noun', function (Request $request) {
     ]);
 });
 
-Route::post('/warpcast-frames/previous-noun', function (Request $request) {
+Route::post('/warpcast-frames/previous-noun', function (int $currentNounTokenId) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
-
-    $currentNounTokenId = $request->input('noun');
 
     if ($currentNounTokenId === null || ! is_numeric($currentNounTokenId)) {
         throw new \Exception('Invalid Noun');
