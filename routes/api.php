@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\LilNounController;
 use App\Http\Controllers\Actions\GetLilNounsTraits;
 use App\Http\Controllers\NounController;
@@ -46,13 +47,30 @@ Route::get('/warpcast-frames/random-noun', function () {
     \Log::info(request()->input('trustedData', 'no trusted data'));
     \Log::info(request()->input('untrustedData', 'no untrusted data'));
 
-    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
-
-    $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
-
-    return view('warpcast-frames.random-noun', [
-        'nounPng' => $nounPng
+    $response = Http::post('https://hub.farcaster.xyz/validateMessage', [
+        'messageBytes' => request()->input('trustedData.messageBytes'),
     ]);
+    
+    \Log::info($response->body());
+
+    if ($response->successful()) {
+        $validationResult = $response->json();
+        
+        if (isset($validationResult['isValid']) && $validationResult['isValid']) {
+            $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+
+            $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
+
+            return view('warpcast-frames.random-noun', [
+                'nounPng' => $nounPng
+            ]);
+        } else {
+            throw new \Exception('Message is not valid');
+        }
+    } else {
+        // The API call failed; handle the error
+        throw new \Exception('Validation request failed.');
+    }    
 });
 
 Route::post('/warpcast-frames/random-noun', function () {
@@ -62,11 +80,28 @@ Route::post('/warpcast-frames/random-noun', function () {
     \Log::info(request()->input('trustedData', 'no trusted data'));
     \Log::info(request()->input('untrustedData', 'no untrusted data'));
 
-    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
-
-    $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
-
-    return view('warpcast-frames.random-noun', [
-        'nounPng' => $nounPng
+    $response = Http::post('https://hub.farcaster.xyz/validateMessage', [
+        'messageBytes' => request()->input('trustedData.messageBytes'),
     ]);
+    
+    \Log::info($response->body());
+
+    if ($response->successful()) {
+        $validationResult = $response->json();
+        
+        if (isset($validationResult['isValid']) && $validationResult['isValid']) {
+            $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+
+            $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
+
+            return view('warpcast-frames.random-noun', [
+                'nounPng' => $nounPng
+            ]);
+        } else {
+            throw new \Exception('Message is not valid');
+        }
+    } else {
+        // The API call failed; handle the error
+        throw new \Exception('Validation request failed.');
+    }
 });
