@@ -44,7 +44,7 @@ class UpdateNounTokenPng implements ShouldQueue
             ? 'nouns/pngs/' . $noun->token_id . '.png'
             : 'staging/nouns/pngs/' . $noun->token_id . '.png';
 
-        Storage::put($filePath, $imagick->getImageBlob());
+        Storage::put($filePath, $imagick->getImageBlob(), 'public');
 
         $noun->update(['png_path' => $filePath]);
 
