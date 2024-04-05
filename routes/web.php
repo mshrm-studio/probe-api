@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Noun;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +17,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/warpcast-frames/probe', function () {
     return view('warpcast-frames.probe');
+});
+
+Route::get('/warpcast-frames/random-noun', function () {
+    $noun = Noun::inRandomOrder()->first();
+    
+    return view('warpcast-frames.probe', [
+        'noun' => $noun
+    ]);
+});
+
+Route::post('/warpcast-frames/random-noun', function () {
+    $noun = Noun::inRandomOrder()->first();
+
+    return view('warpcast-frames.random-noun', [
+        'noun' => $noun
+    ]);
 });
