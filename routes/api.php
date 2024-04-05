@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\LilNounController;
 use App\Http\Controllers\Actions\GetLilNounsTraits;
 use App\Http\Controllers\NounController;
