@@ -52,6 +52,7 @@ Route::get('/warpcast-frames/random-noun', function () {
     $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
 
     return view('warpcast-frames.random-noun', [
+        'noun' => $noun,
         'nounPng' => $nounPng
     ]);
 });
@@ -68,6 +69,7 @@ Route::post('/warpcast-frames/random-noun', function () {
     $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
 
     return view('warpcast-frames.random-noun', [
+        'noun' => $noun,
         'nounPng' => $nounPng
     ]);
 });
