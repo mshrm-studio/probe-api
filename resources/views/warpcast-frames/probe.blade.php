@@ -10,6 +10,8 @@
     <meta property="fc:frame:image" content="https://probewtf.fra1.cdn.digitaloceanspaces.com/nouns/glasses-square-red.png" />    
 
     <!-- Optional Properties for Interaction -->
+    <meta property="fc:frame:input:text" content="Search" />
+
     <meta property="fc:frame:button:1" content="probe.wtf" />
     <meta property="fc:frame:button:1:action" content="link" />
     <meta property="fc:frame:button:1:target" content="https://www.probe.wtf/nouns" />
