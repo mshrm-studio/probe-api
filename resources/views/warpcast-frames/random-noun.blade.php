@@ -11,7 +11,7 @@
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
 
     <!-- Optional Properties for Interaction -->
-    <meta property="fc:frame:button:1" content="nouns.wtf/noun/{{ $noun->token_id }}" />
+    <meta property="fc:frame:button:1" content="Noun #{{ $noun->token_id }}" />
     <meta property="fc:frame:button:1:action" content="link" />
     <meta property="fc:frame:button:1:target" content="https://nouns.wtf/noun/{{ $noun->token_id }}" />
 
