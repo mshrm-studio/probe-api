@@ -11,7 +11,7 @@
 
     <!-- Optional Properties for Interaction -->
     <meta property="fc:frame:button:1" content="Probe Nouns" />
-    <meta property="fc:frame:button:1:action" content="link" />
+    <meta property="fc:frame:button:1:action" content="post" />
     <meta property="fc:frame:button:1:post_url" content="https://www.probe.wtf/warpcast-frames/probe" />
 </head>
 <body>
