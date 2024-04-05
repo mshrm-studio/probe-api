@@ -40,7 +40,11 @@ Route::get('/warpcast-frames/probe', function () {
 });
 
 Route::get('/warpcast-frames/random-noun', function () {
+    \Log::info('*********');
     \Log::info(request()->headers->all());
+    \Log::info(request()->all());
+    \Log::info(request()->input('trustedData', 'no trusted data'));
+    \Log::info(request()->input('untrustedData', 'no untrusted data'));
 
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
@@ -52,7 +56,11 @@ Route::get('/warpcast-frames/random-noun', function () {
 });
 
 Route::post('/warpcast-frames/random-noun', function () {
+    \Log::info('*********');
     \Log::info(request()->headers->all());
+    \Log::info(request()->all());
+    \Log::info(request()->input('trustedData', 'no trusted data'));
+    \Log::info(request()->input('untrustedData', 'no untrusted data'));
 
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
