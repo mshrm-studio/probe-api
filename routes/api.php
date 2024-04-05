@@ -73,3 +73,95 @@ Route::post('/warpcast-frames/random-noun', function () {
         'nounPng' => $nounPng
     ]);
 });
+
+Route::get('/warpcast-frames/noun-catalogue', function () {
+    // \Log::info('*********');
+    // \Log::info(request()->headers->all());
+    // \Log::info(request()->all());
+    // \Log::info(request()->input('trustedData', 'no trusted data'));
+    // \Log::info(request()->input('untrustedData', 'no untrusted data'));
+   
+    $noun = Noun::inRandomOrder()->first();
+
+    $nounPng = Storage::url('staging/nouns/pngs/' . $noun->token_id . '.png');
+
+    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+
+    return view('warpcast-frames.noun-catalogue', [
+        'hasMore' => $noun->token_id < $lastNoun->token_id,
+        'noun' => $noun,
+        'nounPng' => $nounPng
+    ]);
+});
+
+Route::post('/warpcast-frames/next-noun', function (Request $request) {
+    // \Log::info('*********');
+    // \Log::info(request()->headers->all());
+    // \Log::info(request()->all());
+    // \Log::info(request()->input('trustedData', 'no trusted data'));
+    // \Log::info(request()->input('untrustedData', 'no untrusted data'));
+
+    $currentNounTokenId = $request->input('noun');
+
+    if ($currentNounTokenId === null || ! is_numeric($currentNounTokenId)) {
+        throw new \Exception('Invalid Noun');
+    }
+
+    if ($currentNounTokenId < 0) {
+        throw new \Exception('Invalid Noun');
+    }
+
+    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+
+    if ($currentNounTokenId > $lastNoun->token_id) {
+        throw new \Exception('Invalid Noun');
+    }
+
+    if ($currentNounTokenId == $lastNoun->token_id) {
+        throw new \Exception('No next Noun');
+    }
+    
+    $nextNoun = Noun::where('token_id', $currentNounTokenId + 1)->firstOrFail();
+
+    $nextNounPng = Storage::url('staging/nouns/pngs/' . $nextNoun->token_id . '.png');
+
+    return view('warpcast-frames.noun-catalogue', [
+        'hasMore' => $nextNoun->token_id < $lastNoun->token_id,
+        'noun' => $nextNoun,
+        'nounPng' => $nextNounPng
+    ]);
+});
+
+Route::post('/warpcast-frames/previous-noun', function (Request $request) {
+    // \Log::info('*********');
+    // \Log::info(request()->headers->all());
+    // \Log::info(request()->all());
+    // \Log::info(request()->input('trustedData', 'no trusted data'));
+    // \Log::info(request()->input('untrustedData', 'no untrusted data'));
+
+    $currentNounTokenId = $request->input('noun');
+
+    if ($currentNounTokenId === null || ! is_numeric($currentNounTokenId)) {
+        throw new \Exception('Invalid Noun');
+    }
+
+    if ($currentNounTokenId == 0) {
+        throw new \Exception('No previous Noun');
+    }
+
+    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+
+    if ($currentNounTokenId > $lastNoun->token_id) {
+        throw new \Exception('Invalid Noun');
+    }
+    
+    $previousNoun = Noun::where('token_id', $currentNounTokenId - 1)->firstOrFail();
+
+    $previousNounPng = Storage::url('staging/nouns/pngs/' . $previousNoun->token_id . '.png');
+
+    return view('warpcast-frames.noun-catalogue', [
+        'hasMore' => $previousNoun->token_id < $lastNoun->token_id,
+        'noun' => $previousNoun,
+        'nounPng' => $previousNounPng
+    ]);
+});
