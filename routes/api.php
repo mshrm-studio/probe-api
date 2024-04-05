@@ -101,13 +101,19 @@ Route::post('/warpcast-frames/next-noun/{token}', function (string $token) {
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
     
+    \Log::info('token: ' . $token);
+    
     $currentNounTokenId = intval($token);
 
-    if ($currentNounTokenId == null || $currentNounTokenId <= 0) {
+    \Log::info('currentNounTokenId: ' . $currentNounTokenId);
+
+    if ($currentNounTokenId == null || $currentNounTokenId < 0) {
         throw new \Exception('Invalid Noun');
     }
 
     $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
+
+    \Log::info('lastNoun: ' . $lastNoun->token_id);
 
     if ($currentNounTokenId > $lastNoun->token_id) {
         throw new \Exception('Invalid Noun');
