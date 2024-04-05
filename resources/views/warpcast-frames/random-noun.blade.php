@@ -11,9 +11,13 @@
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
 
     <!-- Optional Properties for Interaction -->
-    <meta property="fc:frame:button:1" content="Probe Nouns" />
-    <meta property="fc:frame:button:1:action" content="post" />
-    <meta property="fc:frame:button:1:post_url" content="https://api.probe.wtf/api/warpcast-frames/random-noun" />
+    <meta property="fc:frame:button:1" content="Noun {{ $noun->token_id }}" />
+    <meta property="fc:frame:button:1:action" content="link" />
+    <meta property="fc:frame:button:1:target" content="https://nouns.wtf/noun/{{ $noun->token_id }}" />
+
+    <meta property="fc:frame:button:2" content="Probe Nouns" />
+    <meta property="fc:frame:button:2:action" content="post" />
+    <meta property="fc:frame:button:2:post_url" content="https://api.probe.wtf/api/warpcast-frames/random-noun" />
 </head>
 <body>
     <h1>probe.wtf</h1>
