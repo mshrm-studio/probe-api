@@ -20,6 +20,7 @@
     <meta property="fc:frame:button:2:target" content="https://probe.wtf/nouns" />
 
     @if ($hasMore)
+        <meta property="fc:frame:post_url" content="https://api.probe.wtf/api/warpcast-frames/next-noun/{{ $noun->token_id }}" />
         <meta property="fc:frame:button:3" content="Next" />
         <meta property="fc:frame:button:3:action" content="post" />
         <meta property="fc:frame:button:3:post_url" content="https://api.probe.wtf/api/warpcast-frames/next-noun/{{ $noun->token_id }}" />
