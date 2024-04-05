@@ -34,7 +34,8 @@ class Noun extends Model
         'svg_path',
         'color_histogram',
         'weight',
-        'area'
+        'area',
+        'png_path'
     ];
 
     protected $casts = [
