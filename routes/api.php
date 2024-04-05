@@ -42,7 +42,7 @@ Route::get('/warpcast-frames/probe', function () {
 });
 
 Route::get('/warpcast-frames/lil-nouns/random', function () {  
-    $lilNoun = LilNoun::where('token_id', '<', 125)->inRandomOrder()->first();
+    $lilNoun = LilNoun::where('token_id', '<', 200)->inRandomOrder()->first();
 
     $lilNounPng = Storage::url('staging/lils/pngs/' . $lilNoun->token_id . '.png');
 
@@ -53,7 +53,7 @@ Route::get('/warpcast-frames/lil-nouns/random', function () {
 });
 
 Route::post('/warpcast-frames/lil-nouns/random', function () {
-    $lilNoun = LilNoun::where('token_id', '<', 125)->inRandomOrder()->first();
+    $lilNoun = LilNoun::where('token_id', '<', 200)->inRandomOrder()->first();
 
     $lilNounPng = Storage::url('staging/lils/pngs/' . $lilNoun->token_id . '.png');
 
