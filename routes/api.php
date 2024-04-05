@@ -46,11 +46,7 @@ Route::get('/warpcast-frames/random-noun', function () {
     \Log::info(request()->all());
     \Log::info(request()->input('trustedData', 'no trusted data'));
     \Log::info(request()->input('untrustedData', 'no untrusted data'));
-
-    $response = Http::post('https://hub.farcaster.xyz/validateMessage', [
-        'messageBytes' => request()->input('trustedData.messageBytes'),
-    ]);
-    
+   
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
     $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
