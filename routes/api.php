@@ -47,7 +47,7 @@ Route::get('/warpcast-frames/random-noun', function () {
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
    
-    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+    $noun = Noun::inRandomOrder()->first();
 
     $nounPng = Storage::url('staging/nouns/pngs/' . $noun->token_id . '.png');
 
@@ -64,7 +64,7 @@ Route::post('/warpcast-frames/random-noun', function () {
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
 
-    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+    $noun = Noun::inRandomOrder()->first();
 
     $nounPng = Storage::url('staging/nouns/pngs/' . $noun->token_id . '.png');
 
