@@ -17,7 +17,7 @@
 
     <meta property="fc:frame:button:2" content="probe.wtf" />
     <meta property="fc:frame:button:2:action" content="link" />
-    <meta property="fc:frame:button:2:target" content="https://probe.wtf/noun" />
+    <meta property="fc:frame:button:2:target" content="https://probe.wtf/nouns" />
 
     <meta property="fc:frame:button:3" content="Random Probe" />
     <meta property="fc:frame:button:3:action" content="post" />
