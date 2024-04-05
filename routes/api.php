@@ -94,14 +94,14 @@ Route::get('/warpcast-frames/noun-catalogue', function () {
     ]);
 });
 
-Route::post('/warpcast-frames/next-noun', function (string $currentNounToken) {
+Route::post('/warpcast-frames/next-noun/{token}', function (string $token) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
     
-    $currentNounTokenId = intval($currentNounToken);
+    $currentNounTokenId = intval($token);
 
     if ($currentNounTokenId == null || $currentNounTokenId <= 0) {
         throw new \Exception('Invalid Noun');
