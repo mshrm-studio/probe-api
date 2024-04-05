@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Noun;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,17 +21,21 @@ Route::get('/warpcast-frames/probe', function () {
 });
 
 Route::get('/warpcast-frames/random-noun', function () {
-    $noun = Noun::inRandomOrder()->first();
+    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+
+    $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
 
     return view('warpcast-frames.random-noun', [
-        'noun' => $noun
+        'nounPng' => $nounPng
     ]);
 });
 
 Route::post('/warpcast-frames/random-noun', function () {
-    $noun = Noun::inRandomOrder()->first();
+    $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
+
+    $nounPng = Storage::temporaryUrl('staging/nouns/pngs/' . $noun->token_id . '.png', now()->addMinutes(60));
 
     return view('warpcast-frames.random-noun', [
-        'noun' => $noun
+        'nounPng' => $nounPng
     ]);
 });
