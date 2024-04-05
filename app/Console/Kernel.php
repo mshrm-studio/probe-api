@@ -48,13 +48,13 @@ class Kernel extends ConsoleKernel
         }
         else if (config('app.env') == 'staging') 
         {
-            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyTenMinutes();
+            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyMinute();
 
             $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
             $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
