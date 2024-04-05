@@ -40,7 +40,7 @@ Route::get('/warpcast-frames/probe', function () {
 });
 
 Route::get('/warpcast-frames/random-noun', function () {
-    \Log::info(request()->all());
+    \Log::info(request()->headers->all());
 
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
@@ -52,7 +52,7 @@ Route::get('/warpcast-frames/random-noun', function () {
 });
 
 Route::post('/warpcast-frames/random-noun', function () {
-    \Log::info(request()->all());
+    \Log::info(request()->headers->all());
 
     $noun = Noun::where('token_id', '<', 150)->inRandomOrder()->first();
 
