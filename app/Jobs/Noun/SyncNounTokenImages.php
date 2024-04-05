@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Jobs\Noun\UpdateNounTokenURI;
+use App\Jobs\Noun\UpdateNounTokenPng;
 use App\Jobs\Noun\UpdateNounTokenSvg;
 use App\Models\Noun;
 
@@ -47,6 +48,16 @@ class SyncNounTokenImages implements ShouldQueue
 
         foreach ($nounsWithoutSvg as $noun) {
             UpdateNounTokenSvg::dispatch($noun)->onQueue('nouns');
+        }
+
+        $nounsWithoutPng = Noun::query()
+            ->whereNull('png_path')
+            ->whereNotNull('svg_path')
+            ->limit(50)
+            ->get();
+
+        foreach ($nounsWithoutPng as $noun) {
+            UpdateNounTokenPng::dispatch($noun)->onQueue('nouns');
         }
     }
 }
