@@ -24,6 +24,6 @@
     <meta property="fc:frame:button:3:post_url" content="https://api.probe.wtf/api/warpcast-frames/random-noun" />
 </head>
 <body>
-    <h1>probe.wtf</h1>
+    <p>go to <a href="https://www.probe.wtf">probe.wtf</a></p>
 </body>
 </html>
