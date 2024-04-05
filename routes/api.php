@@ -88,13 +88,13 @@ Route::get('/warpcast-frames/noun-catalogue', function () {
     $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
 
     return view('warpcast-frames.noun-catalogue', [
-        'hasMore' => $noun->token_id < $lastNoun->token_id,
+        'hasMore' => $noun->token_id < $lastNoun->token_id ? true : false,
         'noun' => $noun,
         'nounPng' => $nounPng
     ]);
 });
 
-Route::post('/warpcast-frames/next-noun', function (int $currentNounTokenId) {
+Route::post('/warpcast-frames/next-noun', function (string $currentNounTokenId) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
@@ -119,18 +119,18 @@ Route::post('/warpcast-frames/next-noun', function (int $currentNounTokenId) {
         throw new \Exception('No next Noun');
     }
     
-    $nextNoun = Noun::where('token_id', $currentNounTokenId + 1)->firstOrFail();
+    $nextNoun = Noun::where('token_id', intval($currentNounTokenId) + 1)->firstOrFail();
 
     $nextNounPng = Storage::url('staging/nouns/pngs/' . $nextNoun->token_id . '.png');
 
     return view('warpcast-frames.noun-catalogue', [
-        'hasMore' => $nextNoun->token_id < $lastNoun->token_id,
+        'hasMore' => $nextNoun->token_id < $lastNoun->token_id ? true : false,
         'noun' => $nextNoun,
         'nounPng' => $nextNounPng
     ]);
 });
 
-Route::post('/warpcast-frames/previous-noun', function (int $currentNounTokenId) {
+Route::post('/warpcast-frames/previous-noun', function (string $currentNounTokenId) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
@@ -156,7 +156,7 @@ Route::post('/warpcast-frames/previous-noun', function (int $currentNounTokenId)
     $previousNounPng = Storage::url('staging/nouns/pngs/' . $previousNoun->token_id . '.png');
 
     return view('warpcast-frames.noun-catalogue', [
-        'hasMore' => $previousNoun->token_id < $lastNoun->token_id,
+        'hasMore' => $previousNoun->token_id < $lastNoun->token_id ? true : false,
         'noun' => $previousNoun,
         'nounPng' => $previousNounPng
     ]);
