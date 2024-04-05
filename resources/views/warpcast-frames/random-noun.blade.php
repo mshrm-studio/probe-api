@@ -12,7 +12,7 @@
     <!-- Optional Properties for Interaction -->
     <meta property="fc:frame:button:1" content="Probe Nouns" />
     <meta property="fc:frame:button:1:action" content="post" />
-    <meta property="fc:frame:button:1:post_url" content="https://www.probe.wtf/warpcast-frames/probe" />
+    <meta property="fc:frame:button:1:post_url" content="https://api.probe.wtf/api/warpcast-frames/random-noun" />
 </head>
 <body>
     <h1>probe.wtf</h1>
