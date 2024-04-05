@@ -41,6 +41,10 @@ Route::get('/warpcast-frames/probe', function () {
     return view('warpcast-frames.probe');
 });
 
+Route::get('/warpcast-frames/lil-nouns/gifs/get-funding-2day', function () {
+    return view('warpcast-frames.lil-nouns.gifs.get-funding-2day');
+});
+
 Route::get('/warpcast-frames/lil-nouns/random', function () {  
     $lilNoun = LilNoun::where('token_id', '<', 500)->inRandomOrder()->first();
 
