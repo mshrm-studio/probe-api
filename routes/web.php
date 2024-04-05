@@ -21,8 +21,8 @@ Route::get('/warpcast-frames/probe', function () {
 
 Route::get('/warpcast-frames/random-noun', function () {
     $noun = Noun::inRandomOrder()->first();
-    
-    return view('warpcast-frames.probe', [
+
+    return view('warpcast-frames.random-noun', [
         'noun' => $noun
     ]);
 });
