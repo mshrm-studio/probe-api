@@ -11,7 +11,7 @@
     <meta property="fc:frame:image:aspect_ratio" content="1:1" />
 
     <!-- Optional Properties for Interaction -->
-    <meta property="fc:frame:button:1" content="LilNoun #{{ $lilNoun->token_id }}" />
+    <meta property="fc:frame:button:1" content="Lil Noun #{{ $lilNoun->token_id }}" />
     <meta property="fc:frame:button:1:action" content="link" />
     <meta property="fc:frame:button:1:target" content="https://lilnouns.wtf/lilnoun/{{ $lilNoun->token_id }}" />
 
@@ -19,7 +19,7 @@
     <meta property="fc:frame:button:2:action" content="link" />
     <meta property="fc:frame:button:2:target" content="https://probe.wtf/lils" />
 
-    <meta property="fc:frame:button:3" content="Random Noun" />
+    <meta property="fc:frame:button:3" content="Random Lil Noun" />
     <meta property="fc:frame:button:3:action" content="post" />
     <meta property="fc:frame:button:3:post_url" content="https://api.probe.wtf/api/warpcast-frames/lil-nouns/random" />
 </head>
