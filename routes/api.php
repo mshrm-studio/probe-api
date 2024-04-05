@@ -94,18 +94,16 @@ Route::get('/warpcast-frames/noun-catalogue', function () {
     ]);
 });
 
-Route::post('/warpcast-frames/next-noun', function (string $currentNounTokenId) {
+Route::post('/warpcast-frames/next-noun/{token}', function (string $token) {
     // \Log::info('*********');
     // \Log::info(request()->headers->all());
     // \Log::info(request()->all());
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
+    
+    $currentNounTokenId = intval($token);
 
-    if ($currentNounTokenId === null || ! is_numeric($currentNounTokenId)) {
-        throw new \Exception('Invalid Noun');
-    }
-
-    if ($currentNounTokenId < 0) {
+    if ($currentNounTokenId == null || $currentNounTokenId <= 0) {
         throw new \Exception('Invalid Noun');
     }
 
@@ -119,7 +117,7 @@ Route::post('/warpcast-frames/next-noun', function (string $currentNounTokenId) 
         throw new \Exception('No next Noun');
     }
     
-    $nextNoun = Noun::where('token_id', intval($currentNounTokenId) + 1)->firstOrFail();
+    $nextNoun = Noun::where('token_id', $currentNounTokenId + 1)->firstOrFail();
 
     $nextNounPng = Storage::url('staging/nouns/pngs/' . $nextNoun->token_id . '.png');
 
