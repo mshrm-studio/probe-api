@@ -107,7 +107,7 @@ Route::post('/warpcast-frames/next-noun/{token}', function (string $token) {
 
     \Log::info('currentNounTokenId: ' . $currentNounTokenId);
 
-    if ($currentNounTokenId == null || $currentNounTokenId < 0) {
+    if ($currentNounTokenId < 0) {
         throw new \Exception('Invalid Noun');
     }
 
