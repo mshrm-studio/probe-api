@@ -19,7 +19,13 @@
     <meta property="fc:frame:button:2:action" content="link" />
     <meta property="fc:frame:button:2:target" content="https://probe.wtf/nouns" />
 
-    @if ($noun->token_id >= 0)
+    @if ($hasMore)
+        <meta property="fc:frame:button:3" content="Next" />
+        <meta property="fc:frame:button:3:action" content="post" />
+        <meta property="fc:frame:button:3:post_url" content="https://api.probe.wtf/api/warpcast-frames/next-noun/{{ $noun->token_id }}" />
+    @endif
+
+    {{-- @if ($noun->token_id >= 0)
         @if ($noun->token_id > 0)
             <meta property="fc:frame:button:3" content="Previous" />
             <meta property="fc:frame:button:3:action" content="post" />
@@ -35,7 +41,7 @@
             <meta property="fc:frame:button:3:action" content="post" />
             <meta property="fc:frame:button:3:post_url" content="https://api.probe.wtf/api/warpcast-frames/next-noun/{{ $noun->token_id }}" />
         @endif
-    @endif    
+    @endif     --}}
 </head>
 <body>
     <p>go to <a href="https://www.probe.wtf">probe.wtf</a></p>

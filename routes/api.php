@@ -81,11 +81,11 @@ Route::get('/warpcast-frames/noun-catalogue', function () {
     // \Log::info(request()->input('trustedData', 'no trusted data'));
     // \Log::info(request()->input('untrustedData', 'no untrusted data'));
    
-    $noun = Noun::inRandomOrder()->first();
+    $noun = Noun::orderBy('token_id', 'asc')->firstOrFail();
 
     $nounPng = Storage::url('staging/nouns/pngs/' . $noun->token_id . '.png');
 
-    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+    $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
 
     return view('warpcast-frames.noun-catalogue', [
         'hasMore' => $noun->token_id < $lastNoun->token_id,
@@ -109,7 +109,7 @@ Route::post('/warpcast-frames/next-noun', function (int $currentNounTokenId) {
         throw new \Exception('Invalid Noun');
     }
 
-    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+    $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
 
     if ($currentNounTokenId > $lastNoun->token_id) {
         throw new \Exception('Invalid Noun');
@@ -145,7 +145,7 @@ Route::post('/warpcast-frames/previous-noun', function (int $currentNounTokenId)
         throw new \Exception('No previous Noun');
     }
 
-    $lastNoun = Noun::orderBy('token_id', 'desc')->first();
+    $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
 
     if ($currentNounTokenId > $lastNoun->token_id) {
         throw new \Exception('Invalid Noun');
