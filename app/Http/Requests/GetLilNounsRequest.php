@@ -60,7 +60,7 @@ class GetLilNounsRequest extends FormRequest
             ],
             'sort_property' => [
                 'sometimes',
-                'in:minted_at,token_id',
+                'in:minted_at,token_id,weight',
             ],
             'sort_method' => [
                 'sometimes',
