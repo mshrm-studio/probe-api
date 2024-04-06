@@ -46,7 +46,7 @@ Route::get('/warpcast-frames/lil-nouns/gifs/get-funding-2day', function () {
 });
 
 Route::get('/warpcast-frames/lil-nouns/random', function () {  
-    $lilNoun = LilNoun::where('token_id', '<', 1900)->inRandomOrder()->first();
+    $lilNoun = LilNoun::where('token_id', '<', 7200)->inRandomOrder()->first();
 
     $lilNounPng = Storage::url('staging/lils/pngs/' . $lilNoun->token_id . '.png');
 
@@ -57,7 +57,7 @@ Route::get('/warpcast-frames/lil-nouns/random', function () {
 });
 
 Route::post('/warpcast-frames/lil-nouns/random', function () {
-    $lilNoun = LilNoun::where('token_id', '<', 1900)->inRandomOrder()->first();
+    $lilNoun = LilNoun::where('token_id', '<', 7200)->inRandomOrder()->first();
 
     $lilNounPng = Storage::url('staging/lils/pngs/' . $lilNoun->token_id . '.png');
 
