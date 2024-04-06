@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Actions\GetLilNounByTokenId;
+use App\Http\Controllers\Actions\GetLilNounColors;
 use App\Http\Controllers\Actions\GetNounByTokenId;
 use App\Http\Controllers\Actions\GetNounColors;
 use App\Http\Controllers\LilNounController;
@@ -28,6 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('lil-nouns', [LilNounController::class, 'index']);
 Route::get('lil-nouns/{token_id}', GetLilNounByTokenId::class);
+Route::get('lil-noun-colors', GetLilNounColors::class);
 Route::get('lil-noun-traits', [LilNounTraitController::class, 'index']);
 
 Route::get('nouns', [NounController::class, 'index']);
