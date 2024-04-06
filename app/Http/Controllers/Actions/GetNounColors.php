@@ -20,7 +20,9 @@ class GetNounColors extends Controller
             $allColors = [];
     
             foreach ($colorHistograms as $histogram) {
-                $allColors = array_merge($allColors, array_keys($histogram)); // Directly merge the keys (colors) into allColors array
+                if (is_array($histogram)) {
+                    $allColors = array_merge($allColors, array_keys($histogram)); // Directly merge the keys (colors) into allColors array
+                }
             }
     
             $uniqueColors = array_unique($allColors); // Filter out duplicate colors
