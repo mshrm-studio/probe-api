@@ -56,7 +56,7 @@ class GetNounsRequest extends FormRequest
             ],
             'sort_property' => [
                 'sometimes',
-                'in:minted_at,token_id,weight',
+                'in:minted_at,token_id,weight,area',
             ],
             'sort_method' => [
                 'sometimes',
