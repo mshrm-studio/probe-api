@@ -20,6 +20,7 @@ class LilNounController extends Controller
     {
         $accessory = $request->input('accessory', null);
         $body = $request->input('body', null);
+        $color = $request->input('color', null);
         $glasses = $request->input('glasses', null);
         $head = $request->input('head', null);
         $background = $request->input('background', null);
@@ -58,6 +59,10 @@ class LilNounController extends Controller
             })
             ->when(is_string($body), function ($query) use ($body) {
                 $query->where('body_name', $body);
+            })
+            ->when(is_string($color), function ($query) use ($color) {
+                $query->whereRaw("JSON_CONTAINS_PATH(color_histogram, 'one', CONCAT('$.\"', ?, '\"')) = 1", [$color])->get();
+
             })
             ->when(is_string($glasses), function ($query) use ($glasses) {
                 $query->where('glasses_name', $glasses);

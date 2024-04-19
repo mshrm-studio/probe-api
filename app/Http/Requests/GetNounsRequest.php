@@ -31,6 +31,10 @@ class GetNounsRequest extends FormRequest
                 'sometimes',
                 'exists:noun_traits,name'
             ],
+            'color' => [
+                'sometimes',
+                'string',
+            ],
             'body' => [
                 'sometimes',
                 'exists:noun_traits,name'
