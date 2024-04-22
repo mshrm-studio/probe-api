@@ -33,7 +33,7 @@ class SyncNounTokenColors implements ShouldQueue
             ->whereNull('area')
             ->whereNull('color_histogram')
             ->whereNull('weight')
-            ->limit(50)
+            ->limit(100)
             ->get();
 
         foreach ($nouns as $noun) {          
