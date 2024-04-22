@@ -30,7 +30,7 @@ class GetLilNounTraitsRequest extends FormRequest
                 'sometimes',
                 'integer',
                 'min:1',
-                'max:300'
+                'max:500'
             ],
             'search' => [
                 'sometimes',
