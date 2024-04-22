@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Services\NounsTraitService;
 use Illuminate\Validation\Rule;
 
 class GetNounsRequest extends FormRequest
@@ -23,30 +22,36 @@ class GetNounsRequest extends FormRequest
      */
     public function rules(): array
     {
-        $traitService = new NounsTraitService();
-
-        $traits = $traitService->getItems();
-
         return [
             'accessory' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'accessory')->pluck('name'))
+                'exists:noun_traits,name'
             ],
             'background' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'background')->pluck('name'))
+                'exists:noun_traits,name'
+            ],
+            'color' => [
+                'sometimes',
+                'string',
             ],
             'body' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'body')->pluck('name'))
+                'exists:noun_traits,name'
             ],
             'glasses' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'glasses')->pluck('name'))
+                'exists:noun_traits,name'
             ],
             'head' => [
                 'sometimes',
-                Rule::in($traits->where('layer', 'head')->pluck('name'))
+                'exists:noun_traits,name'
+            ],
+            'per_page' => [
+                'sometimes',
+                'integer',
+                'min:1',
+                'max:300'
             ],
             'search' => [
                 'sometimes',
@@ -55,7 +60,7 @@ class GetNounsRequest extends FormRequest
             ],
             'sort_property' => [
                 'sometimes',
-                'in:minted_at,token_id',
+                'in:minted_at,token_id,weight,area',
             ],
             'sort_method' => [
                 'sometimes',

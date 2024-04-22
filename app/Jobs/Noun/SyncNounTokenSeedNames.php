@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Noun;
-use App\Services\NounsTraitService;
+use App\Models\NounTrait;
 
 class SyncNounTokenSeedNames implements ShouldQueue
 {
@@ -26,7 +26,7 @@ class SyncNounTokenSeedNames implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(NounsTraitService $traitService): void
+    public function handle(): void
     {
         $nouns = Noun::query()
             ->whereNull('background_name')
@@ -37,7 +37,7 @@ class SyncNounTokenSeedNames implements ShouldQueue
             ->limit(50)
             ->get();
             
-        $traits = $traitService->getItems();
+        $traits = NounTrait::all();
 
         foreach ($nouns as $noun) {
             if (is_null($noun->head_name) && is_int($noun->head_index)) {

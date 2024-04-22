@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class NounResource extends JsonResource
 {
@@ -14,6 +15,12 @@ class NounResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $data = parent::toArray($request);
+
+        $data['svg_url'] = $this->svg_path
+            ? Storage::temporaryUrl($this->svg_path, now()->addMinutes(60))
+            : null;
+
+        return $data;
     }
 }
