@@ -70,14 +70,14 @@ class Kernel extends ConsoleKernel
         }
         else if (config('app.env') == 'production') 
         {
-            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyMinute();
-            $schedule->job(new SyncLilNounTokenColors, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTotalSupply, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenImages, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenColors, 'lils')->hourly();
 
             $schedule->job(new SyncNounTotalSupply, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenIdentities, 'nouns')->hourly();
