@@ -17,6 +17,10 @@ class NounResource extends JsonResource
     {
         $data = parent::toArray($request);
 
+        $data['png_url'] = $this->png_path
+            ? Storage::temporaryUrl($this->png_path, now()->addMinutes(60))
+            : null;
+
         $data['svg_url'] = $this->svg_path
             ? Storage::temporaryUrl($this->svg_path, now()->addMinutes(60))
             : null;
