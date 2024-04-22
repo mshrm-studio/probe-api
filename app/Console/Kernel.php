@@ -70,23 +70,23 @@ class Kernel extends ConsoleKernel
         }
         else if (config('app.env') == 'production') 
         {
-            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyTenMinutes();
-            $schedule->job(new SyncLilNounTokenColors, 'lils')->everyTenMinutes();
+            $schedule->job(new SyncLilNounTotalSupply, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenImages, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->everyMinute();
+            $schedule->job(new SyncLilNounTokenColors, 'lils')->everyMinute();
 
-            $schedule->job(new SyncNounTotalSupply, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenIdentities, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenImages, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyThreeHours();
-            $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
+            $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenImages, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenSeeds, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenSeedNames, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
         }
     }
 
