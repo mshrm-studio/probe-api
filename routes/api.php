@@ -12,7 +12,6 @@ use App\Http\Controllers\LilNounTraitController;
 use App\Http\Controllers\NounController;
 use App\Http\Controllers\NounTraitController;
 
-
 use App\Models\LilNoun;
 use App\Models\Noun;
 use Illuminate\Support\Facades\Storage;
