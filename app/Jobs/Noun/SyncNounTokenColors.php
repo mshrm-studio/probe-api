@@ -43,7 +43,7 @@ class SyncNounTokenColors implements ShouldQueue
             
             $imagick->readImageBlob($svgContent);
 
-            $imagick->resizeImage(32, 32, \Imagick::FILTER_LANCZOS, 1);
+            $imagick->resizeImage(32, 32, \Imagick::FILTER_UNDEFINED, 1);
             
             $imagick->setImageFormat('png8');
 
