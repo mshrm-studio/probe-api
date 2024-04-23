@@ -48,6 +48,12 @@ class SyncNounTokenColors implements ShouldQueue
             \Log::info('resizeImage(32, 32, \Imagick::FILTER_POINT, 1)');
 
             $imagick->resizeImage(32, 32, \Imagick::FILTER_POINT, 1);
+
+            $filePath = config('app.env') == 'production'
+                ? 'nouns/resized-pngs/' . $noun->token_id . '.png'
+                : 'staging/nouns/resized-pngs/' . $noun->token_id . '.png';
+
+            Storage::put($filePath, $imagick->getImageBlob(), 'public');
             
             $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
                                 
