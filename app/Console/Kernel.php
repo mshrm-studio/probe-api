@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
         }
         else if (config('app.env') == 'production') 
         {
