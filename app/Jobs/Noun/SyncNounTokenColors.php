@@ -110,7 +110,7 @@ class SyncNounTokenColors implements ShouldQueue
                 $greyScalePixel = ($colorRGB['r'] + $colorRGB['g'] + $colorRGB['b']) / 3;
 
                 // Times the pixel count for the color by the grey scale pixel (mass for color)
-                $weight += ($pixel->getColorCount() * (255 - $greyScalePixel));
+                $weight += ($pixel->getColorCount() * $greyScalePixel);
             }
         }
     

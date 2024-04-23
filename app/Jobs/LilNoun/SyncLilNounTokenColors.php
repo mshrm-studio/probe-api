@@ -45,6 +45,8 @@ class SyncLilNounTokenColors implements ShouldQueue
             
             $imagick->setImageFormat('png24');
 
+            $imagick->resizeImage(32, 32, \Imagick::FILTER_POINT, 1);
+
             $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
                                 
             $histogram = $imagick->getImageHistogram();

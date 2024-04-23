@@ -66,7 +66,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
         }
         else if (config('app.env') == 'production') 
         {
@@ -77,7 +77,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->hourly();
             $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->hourly();
             $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenColors, 'lils')->hourly();
+            $schedule->job(new SyncLilNounTokenColors, 'lils')->everyMinute();
 
             $schedule->job(new SyncNounTotalSupply, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenIdentities, 'nouns')->hourly();
@@ -86,7 +86,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenSeedNames, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->hourly();
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
+            $schedule->job(new SyncNounTokenColors, 'nouns')->everyMinute();
         }
     }
 
