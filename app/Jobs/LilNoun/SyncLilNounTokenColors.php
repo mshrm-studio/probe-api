@@ -45,6 +45,8 @@ class SyncLilNounTokenColors implements ShouldQueue
             
             $imagick->setImageFormat('png24');
 
+            $imagick->resizeImage(32, 32, \Imagick::FILTER_POINT, 1);
+
             $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
                                 
             $histogram = $imagick->getImageHistogram();
@@ -60,9 +62,9 @@ class SyncLilNounTokenColors implements ShouldQueue
             $imagick->destroy();
 
             $lilNouns->update([
-                'area' => $area, // out of 102,400
+                'area' => $area, // out of 1024
                 'color_histogram' => $formattedHistogram,
-                'weight' => $weight, // out of 26,112,000
+                'weight' => $weight, // out of 261,120
             ]);
         }   
     }
