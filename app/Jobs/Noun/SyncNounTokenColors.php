@@ -45,15 +45,7 @@ class SyncNounTokenColors implements ShouldQueue
 
             $imagick->setImageFormat('png24');
 
-            \Log::info('resizeImage(32, 32, \Imagick::FILTER_POINT, 1)');
-
             $imagick->resizeImage(32, 32, \Imagick::FILTER_POINT, 1);
-
-            $filePath = config('app.env') == 'production'
-                ? 'nouns/resized-pngs/' . $noun->token_id . '.png'
-                : 'staging/nouns/resized-pngs/' . $noun->token_id . '.png';
-
-            Storage::put($filePath, $imagick->getImageBlob(), 'public');
             
             $backgroundColorHex = $this->getBackgroundColorHex($svgContent);
                                 
@@ -70,9 +62,9 @@ class SyncNounTokenColors implements ShouldQueue
             $imagick->destroy();
 
             $noun->update([
-                'area' => $area, // out of 102,400
+                'area' => $area, // out of 1024
                 'color_histogram' => $formattedHistogram,
-                'weight' => $weight, // out of 26,112,000
+                'weight' => $weight, // out of 261,120
             ]);
         }   
     }
