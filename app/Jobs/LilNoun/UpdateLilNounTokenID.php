@@ -61,6 +61,8 @@ class UpdateLilNounTokenID implements ShouldQueue
                         'color_histogram' => null,
                         'area' => null,
                         'weight' => null,
+                        'svg_path' => null,
+                        'png_path' => null,
                     ]);
                 } else {
                     $lilNoun->update([
