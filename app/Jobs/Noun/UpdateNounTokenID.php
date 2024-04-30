@@ -57,7 +57,10 @@ class UpdateNounTokenID implements ShouldQueue
                         'minted_at' => null,
                         'token_uri' => null,
                         'token_id' => $tokenId,
-                        'token_id_last_synced_at' => now()
+                        'token_id_last_synced_at' => now(),
+                        'color_histogram' => null,
+                        'area' => null,
+                        'weight' => null,
                     ]);
                 } else {
                     $noun->update([
