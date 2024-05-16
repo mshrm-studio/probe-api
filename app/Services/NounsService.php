@@ -15,8 +15,12 @@ class NounsService extends BaseNounsService {
 
         $seconds = 300;
 
-        $abi = Cache::remember('nouns-abi-v2', $seconds, function () {
-            $abiUrl = Storage::url('nouns/nouns-contract-abi-v2.json');
+        $fileName = config('app.env') == 'production'
+            ? 'nouns-contract-abi-v2'
+            : 'nouns-contract-abi-sepolia';
+
+        $abi = Cache::remember($fileName, $seconds, function () use ($fileName) {
+            $abiUrl = Storage::url('nouns/abi/'. $fileName .'.json');
             $response = Http::get($abiUrl);
             return $response->json();
         });
