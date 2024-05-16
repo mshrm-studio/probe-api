@@ -31,6 +31,8 @@ class SyncNounTotalSupply implements ShouldQueue
     {
         $totalSupply = $service->getTotalSupply();
 
+        \Log::info('SyncNounTotalSupply: ' . $totalSupply);
+
         if ($totalSupply > 0) {
             Noun::where('index', '>', $totalSupply - 1)->delete();
 
