@@ -68,8 +68,6 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
                 throw new \Exception($err->getMessage());
             }
 
-            \Log::info('BaseNounsService getTotalSupply(), result: ' . json_encode($result));
-
             $resultBigInteger = $result[0] instanceof \phpseclib\Math\BigInteger ? $result[0] : null;
             
             if ($resultBigInteger) {
