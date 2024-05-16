@@ -50,14 +50,16 @@ class Kernel extends ConsoleKernel
         }
         else if (config('app.env') == 'staging') 
         {
-            $schedule->job(new SyncLilNounTotalSupply, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenIdentities, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenImages, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenSeeds, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->hourly();
-            $schedule->job(new SyncLilNounTokenColors, 'lils')->hourly();
+            // sepolia not setup for lilnouns
+            // 
+            // $schedule->job(new SyncLilNounTotalSupply, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenIdentities, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenImages, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenSeeds, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenSeedNames, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenBlockNumbers, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenMintTimes, 'lils')->hourly();
+            // $schedule->job(new SyncLilNounTokenColors, 'lils')->hourly();
 
             $schedule->job(new SyncNounTotalSupply, 'nouns')->everyMinute();
             $schedule->job(new SyncNounTokenIdentities, 'nouns')->everyMinute();
