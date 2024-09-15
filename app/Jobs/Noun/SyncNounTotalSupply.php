@@ -29,7 +29,6 @@ class SyncNounTotalSupply implements ShouldQueue
      */
     public function handle(NounsService $service): void
     {
-        \Log::info('SyncNounTotalSupply');
         $totalSupply = $service->getTotalSupply();
 
         if ($totalSupply > 0) {

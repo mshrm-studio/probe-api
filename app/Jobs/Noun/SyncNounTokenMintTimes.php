@@ -28,8 +28,6 @@ class SyncNounTokenMintTimes implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenMintTimes');
-
         $nouns = Noun::query()
             ->whereNull('minted_at')
             ->whereNotNull('block_number')

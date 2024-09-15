@@ -13,12 +13,16 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-    'lil_nouns_contract' => [
-        'address' => env('LIL_NOUNS_CONTRACT_ADDRESS')
+    'lil_nouns' => [
+        'contract' => [
+            'token_address' => env('LIL_NOUNS_TOKEN_CONTRACT_ADDRESS')
+        ]
     ],
 
-    'nouns_contract' => [
-        'address' => env('NOUNS_CONTRACT_ADDRESS')
+    'nouns' => [
+        'contract' => [
+            'token_address' => env('NOUNS_TOKEN_CONTRACT_ADDRESS')
+        ]
     ],
 
     'infura' => [

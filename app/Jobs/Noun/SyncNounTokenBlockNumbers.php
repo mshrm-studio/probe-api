@@ -28,8 +28,6 @@ class SyncNounTokenBlockNumbers implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenBlockNumbers');
-
         $nouns = Noun::query()
             ->whereNull('block_number')
             ->whereNotNull('token_id')
