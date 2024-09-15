@@ -28,8 +28,6 @@ class SyncNounTokenSeedNames implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenSeedNames');
-
         $nouns = Noun::query()
             ->whereNull('background_name')
             ->orWhereNull('body_name')

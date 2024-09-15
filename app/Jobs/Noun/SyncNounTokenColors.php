@@ -28,8 +28,6 @@ class SyncNounTokenColors implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenColors');
-
         $nouns = Noun::query()
             ->whereNotNull('svg_path')
             ->whereNull('area')

@@ -28,8 +28,6 @@ class SyncNounTokenSeeds implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenSeeds');
-
         $nouns = Noun::query()
             ->whereNotNull('token_id')
             ->where(function ($query) {

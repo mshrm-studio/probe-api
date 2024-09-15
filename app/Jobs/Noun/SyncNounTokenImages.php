@@ -30,8 +30,6 @@ class SyncNounTokenImages implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('SyncNounTokenImages');
-
         $nounsWithoutTokenUri = Noun::query()
             ->whereNull('token_uri')
             ->whereNotNull('token_id')
