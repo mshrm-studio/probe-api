@@ -117,20 +117,14 @@ Route::get('/warpcast-frames/nouns/catalogue', function () {
     ]);
 });
 
-Route::post('/warpcast-frames/nouns/next/{token}', function (string $token) {   
-    \Log::info('token: ' . $token);
-    
+Route::post('/warpcast-frames/nouns/next/{token}', function (string $token) {       
     $currentNounTokenId = intval($token);
-
-    \Log::info('currentNounTokenId: ' . $currentNounTokenId);
 
     if ($currentNounTokenId < 0) {
         throw new \Exception('Invalid Noun');
     }
 
     $lastNoun = Noun::orderBy('token_id', 'desc')->firstOrFail();
-
-    \Log::info('lastNoun: ' . $lastNoun->token_id);
 
     if ($currentNounTokenId > $lastNoun->token_id) {
         throw new \Exception('Invalid Noun');

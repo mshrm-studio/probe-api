@@ -28,6 +28,8 @@ class SyncNounTokenIdentities implements ShouldQueue
      */
     public function handle(): void
     {
+        \Log::info('SyncNounTokenIdentities');
+
         $nouns = Noun::query()
             ->where(function ($query) {
                 $query

@@ -15,8 +15,10 @@ class LilNounsService extends BaseNounsService {
 
         $seconds = 300;
 
-        $abi = Cache::remember('lil-nouns-abi-v2', $seconds, function () {
-            $abiUrl = Storage::url('lils/lil-nouns-contract-abi-v2.json');
+        $fileName = 'lil-nouns-contract-abi-v2';
+
+        $abi = Cache::remember($fileName, $seconds, function () use ($fileName) {
+            $abiUrl = Storage::url('lils/abi/'. $fileName .'.json');
             $response = Http::get($abiUrl);
             return $response->json();
         });
