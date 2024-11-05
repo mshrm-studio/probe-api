@@ -12,6 +12,7 @@ class NounTrait extends Model
     protected $fillable = [
         'name',
         'layer',
+        'png_path',
         'seed_id',
         'svg_path'
     ];
