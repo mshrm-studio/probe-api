@@ -30,6 +30,7 @@ class SyncNounTraitImages implements ShouldQueue
     public function handle(): void
     {
         $nounTraitsWithNoPngPath = NounTrait::query()
+            ->inRandomOrder()
             ->whereNull('png_path')
             ->whereNotNull('svg_path')
             ->limit(50)
@@ -40,6 +41,7 @@ class SyncNounTraitImages implements ShouldQueue
         }
 
         $nounTraitsWithNoRleData = NounTrait::query()
+            ->inRandomOrder()
             ->whereNull('rle_data')
             ->whereNotNull('svg_path')
             ->limit(50)
