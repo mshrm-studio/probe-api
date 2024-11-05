@@ -9,6 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Jobs\NounTrait\UpdateNounTraitPng;
+use App\Jobs\NounTrait\UpdateNounTraitRle;
 use App\Models\NounTrait;
 
 class SyncNounTraitImages implements ShouldQueue
@@ -36,6 +37,7 @@ class SyncNounTraitImages implements ShouldQueue
 
         foreach ($nounTraitsWithNoPngPath as $nounTrait) {
             UpdateNounTraitPng::dispatch($nounTrait)->onQueue('nouns');
+            UpdateNounTraitRle::dispatch($nounTrait)->onQueue('nouns');
         }
     }
 }

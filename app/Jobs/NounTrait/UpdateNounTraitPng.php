@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\NounTrait;
 use Illuminate\Support\Facades\Storage;
+use Exception;
 
 class UpdateNounTraitPng implements ShouldQueue
 {
@@ -31,7 +32,7 @@ class UpdateNounTraitPng implements ShouldQueue
     public function handle(): void
     {
         if (!Storage::exists($this->nounTrait->svg_path)) {
-            throw new \Exception("SVG file does not exist at path: {$this->nounTrait->svg_path}");
+            throw new Exception("SVG file does not exist at path: {$this->nounTrait->svg_path}");
         }
 
         try {
