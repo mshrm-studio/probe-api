@@ -94,8 +94,12 @@ class UpdateNounTraitRle implements ShouldQueue
             'bounds' => [
                 'left' => 0,
                 'top' => 0,
-                'right' => max(array_column($rleData, 'x')) + $width,
-                'bottom' => max(array_column($rleData, 'y')) + $height,
+                'right' => !empty(array_column($rleData, 'x')) 
+                    ? max(array_column($rleData, 'x')) + $width 
+                    : $width,
+                'bottom' => !empty(array_column($rleData, 'y')) 
+                    ? max(array_column($rleData, 'y')) + $height 
+                    : $height,
             ],
             'rects' => array_map(function ($rect) {
                 return [$rect['length'], $rect['colorIndex']];
