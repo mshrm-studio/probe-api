@@ -63,6 +63,8 @@ class UpdateNounTraitRle implements ShouldQueue
 
         // Iterate through each SVG element
         foreach ($xml->children() as $element) {
+            \Log::info(json_encode($element));
+            
             if ($element->getName() === 'rect') {
                 $x = isset($element['x']) ? (int)$element['x'] : 0;
                 $y = isset($element['y']) ? (int)$element['y'] : 0;
@@ -91,7 +93,7 @@ class UpdateNounTraitRle implements ShouldQueue
                     ];
                 }
             }
-            
+
             // Additional SVG elements like circles, ellipses, and lines are ignored to meet `buildSVG` expectations
         }
 
