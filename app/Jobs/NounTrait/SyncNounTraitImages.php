@@ -37,6 +37,15 @@ class SyncNounTraitImages implements ShouldQueue
 
         foreach ($nounTraitsWithNoPngPath as $nounTrait) {
             UpdateNounTraitPng::dispatch($nounTrait)->onQueue('nouns');
+        }
+
+        $nounTraitsWithNoRleData = NounTrait::query()
+            ->whereNull('rle_data')
+            ->whereNotNull('svg_path')
+            ->limit(50)
+            ->get();
+
+        foreach ($nounTraitsWithNoRleData as $nounTrait) {
             UpdateNounTraitRle::dispatch($nounTrait)->onQueue('nouns');
         }
     }
