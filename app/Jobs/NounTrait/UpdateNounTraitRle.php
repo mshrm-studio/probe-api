@@ -40,22 +40,26 @@ class UpdateNounTraitRle implements ShouldQueue
             $imagick = new \Imagick();
             $imagick->readImageBlob($imgContent);
 
-            // Get image dimensions
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
 
-            // Initialize palette and RLE hex string
             $colorPalette = [];
             $colorIndex = 0;
-            $hexData = sprintf(
-                "0x%02X%02X%02X%02X", // Bounds in hexadecimal (left, top, right, bottom)
-                0, // left bound
-                0, // top bound
-                $width, // right bound
-                $height // bottom bound
+            $rleHex = '';
+
+            // Palette Index - Set as '00' for single-palette scenarios
+            $paletteIndexHex = '00';
+
+            // Bounds information
+            $boundsHex = sprintf(
+                '%02x%02x%02x%02x',
+                0, // top
+                $width, // right
+                $height, // bottom
+                0 // left
             );
 
-            // Iterate through each row to create RLE hex data
+            // Iterate through each row to generate RLE hex
             for ($y = 0; $y < $height; $y++) {
                 $prevColor = null;
                 $runLength = 0;
@@ -65,48 +69,39 @@ class UpdateNounTraitRle implements ShouldQueue
                     $color = $imagick->getImagePixelColor($x, $y)->getColor();
                     $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
 
-                    // Check if this color is part of a run or new
-                    if ($prevColor === $hexColor) {
+                    // Register the color in the palette if it’s not already there
+                    if (!isset($colorPalette[$hexColor])) {
+                        $colorPalette[$hexColor] = $colorIndex++;
+                    }
+                    $currentColorIndex = $colorPalette[$hexColor];
+
+                    // Build RLE by checking if we’re continuing a run
+                    if ($prevColor === $currentColorIndex) {
                         $runLength++;
                     } else {
+                        // Close the previous run and start a new one
                         if ($prevColor !== null) {
-                            // End previous run: encode length and color index
-                            if (!isset($colorPalette[$prevColor])) {
-                                $colorPalette[$prevColor] = $colorIndex++;
-                            }
-                            $hexData .= sprintf(
-                                "%02X%02X", // Run length and color index in hex
-                                $runLength,
-                                $colorPalette[$prevColor]
-                            );
+                            $rleHex .= sprintf('%02x%02x', $runLength, $prevColor);
                         }
-                        // Start new run
-                        $prevColor = $hexColor;
+                        $prevColor = $currentColorIndex;
                         $runLength = 1;
                     }
                 }
-
-                // Finalize the last run of the row
+                // End of row: finalize any ongoing run
                 if ($prevColor !== null) {
-                    if (!isset($colorPalette[$prevColor])) {
-                        $colorPalette[$prevColor] = $colorIndex++;
-                    }
-                    $hexData .= sprintf(
-                        "%02X%02X",
-                        $runLength,
-                        $colorPalette[$prevColor]
-                    );
+                    $rleHex .= sprintf('%02x%02x', $runLength, $prevColor);
                 }
             }
 
-            // Prepare the final output format with palette
-            $output = [
-                'hex_data' => $hexData,
-                'palette' => $colorPalette,
-            ];
+            // Combine all parts into final hex format
+            $hexData = '0x' . $paletteIndexHex . $boundsHex . $rleHex;
 
-            // Save the hex RLE data to your model or database field
-            $this->nounTrait->update(['rle_data' => json_encode($output)]);
+            // Update the model with the hex data and palette
+            $this->nounTrait->update([
+                'hex_data' => $hexData,
+                'palette' => json_encode($colorPalette)
+            ]);
+
         } catch (Exception $e) {
             \Log::error("Failed to generate RLE for NounTrait ID {$this->nounTrait->id}: " . $e->getMessage());
         }
