@@ -44,14 +44,19 @@ class UpdateNounTraitRle implements ShouldQueue
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
 
-            // Prepare RLE and color palette data
-            $rleData = [];
+            // Initialize palette and RLE hex string
             $colorPalette = [];
             $colorIndex = 0;
+            $hexData = sprintf(
+                "0x%02X%02X%02X%02X", // Bounds in hexadecimal (left, top, right, bottom)
+                0, // left bound
+                0, // top bound
+                $width, // right bound
+                $height // bottom bound
+            );
 
-            // Iterate through each row to create RLE data
+            // Iterate through each row to create RLE hex data
             for ($y = 0; $y < $height; $y++) {
-                $rowRLE = [];
                 $prevColor = null;
                 $runLength = 0;
 
@@ -65,14 +70,15 @@ class UpdateNounTraitRle implements ShouldQueue
                         $runLength++;
                     } else {
                         if ($prevColor !== null) {
-                            // End previous run
+                            // End previous run: encode length and color index
                             if (!isset($colorPalette[$prevColor])) {
                                 $colorPalette[$prevColor] = $colorIndex++;
                             }
-                            $rowRLE[] = [
-                                'length' => $runLength,
-                                'colorIndex' => $colorPalette[$prevColor]
-                            ];
+                            $hexData .= sprintf(
+                                "%02X%02X", // Run length and color index in hex
+                                $runLength,
+                                $colorPalette[$prevColor]
+                            );
                         }
                         // Start new run
                         $prevColor = $hexColor;
@@ -85,30 +91,22 @@ class UpdateNounTraitRle implements ShouldQueue
                     if (!isset($colorPalette[$prevColor])) {
                         $colorPalette[$prevColor] = $colorIndex++;
                     }
-                    $rowRLE[] = [
-                        'length' => $runLength,
-                        'colorIndex' => $colorPalette[$prevColor]
-                    ];
+                    $hexData .= sprintf(
+                        "%02X%02X",
+                        $runLength,
+                        $colorPalette[$prevColor]
+                    );
                 }
-
-                // Add row to RLE data
-                $rleData = array_merge($rleData, $rowRLE);
             }
 
-            // Prepare output format for storage
-            $output = json_encode([
-                'bounds' => [
-                    'left' => 0,
-                    'top' => 0,
-                    'right' => $width,
-                    'bottom' => $height,
-                ],
-                'rects' => $rleData,
+            // Prepare the final output format with palette
+            $output = [
+                'hex_data' => $hexData,
                 'palette' => $colorPalette,
-            ]);
+            ];
 
-            // Save the RLE data to your model or database field
-            $this->nounTrait->update(['rle_data' => $output]);
+            // Save the hex RLE data to your model or database field
+            $this->nounTrait->update(['rle_data' => json_encode($output)]);
         } catch (Exception $e) {
             \Log::error("Failed to generate RLE for NounTrait ID {$this->nounTrait->id}: " . $e->getMessage());
         }
