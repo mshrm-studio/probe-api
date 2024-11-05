@@ -43,7 +43,7 @@ class SyncNounTraitImages implements ShouldQueue
         $nounTraitsWithNoRleData = NounTrait::query()
             ->inRandomOrder()
             ->whereNull('rle_data')
-            ->whereNotNull('svg_path')
+            ->whereNotNull('png_path')
             ->limit(50)
             ->get();
 

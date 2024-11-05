@@ -10,7 +10,6 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\NounTrait;
 use Illuminate\Support\Facades\Storage;
 use Exception;
-use SimpleXMLElement;
 
 class UpdateNounTraitRle implements ShouldQueue
 {
@@ -31,84 +30,87 @@ class UpdateNounTraitRle implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!Storage::exists($this->nounTrait->svg_path)) {
+        if (!Storage::exists($this->nounTrait->png_path)) {
             return;
         }
 
         try {
-            $svgContent = Storage::get($this->nounTrait->svg_path);
-            $rleData = $this->encodeSvgToRle($svgContent);
+            // Load image into Imagick
+            $imgContent = Storage::get($this->nounTrait->png_path);
+            $imagick = new \Imagick();
+            $imagick->readImageBlob($imgContent);
 
-            $this->nounTrait->update(['rle_data' => $rleData]);
+            // Get image dimensions
+            $width = $imagick->getImageWidth();
+            $height = $imagick->getImageHeight();
+
+            // Prepare RLE and color palette data
+            $rleData = [];
+            $colorPalette = [];
+            $colorIndex = 0;
+
+            // Iterate through each row to create RLE data
+            for ($y = 0; $y < $height; $y++) {
+                $rowRLE = [];
+                $prevColor = null;
+                $runLength = 0;
+
+                for ($x = 0; $x < $width; $x++) {
+                    // Get color at current pixel
+                    $color = $imagick->getImagePixelColor($x, $y)->getColor();
+                    $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
+
+                    // Check if this color is part of a run or new
+                    if ($prevColor === $hexColor) {
+                        $runLength++;
+                    } else {
+                        if ($prevColor !== null) {
+                            // End previous run
+                            if (!isset($colorPalette[$prevColor])) {
+                                $colorPalette[$prevColor] = $colorIndex++;
+                            }
+                            $rowRLE[] = [
+                                'length' => $runLength,
+                                'colorIndex' => $colorPalette[$prevColor]
+                            ];
+                        }
+                        // Start new run
+                        $prevColor = $hexColor;
+                        $runLength = 1;
+                    }
+                }
+
+                // Finalize the last run of the row
+                if ($prevColor !== null) {
+                    if (!isset($colorPalette[$prevColor])) {
+                        $colorPalette[$prevColor] = $colorIndex++;
+                    }
+                    $rowRLE[] = [
+                        'length' => $runLength,
+                        'colorIndex' => $colorPalette[$prevColor]
+                    ];
+                }
+
+                // Add row to RLE data
+                $rleData = array_merge($rleData, $rowRLE);
+            }
+
+            // Prepare output format for storage
+            $output = json_encode([
+                'bounds' => [
+                    'left' => 0,
+                    'top' => 0,
+                    'right' => $width,
+                    'bottom' => $height,
+                ],
+                'rects' => $rleData,
+                'palette' => $colorPalette,
+            ]);
+
+            // Save the RLE data to your model or database field
+            $this->nounTrait->update(['rle_data' => $output]);
         } catch (Exception $e) {
             \Log::error("Failed to generate RLE for NounTrait ID {$this->nounTrait->id}: " . $e->getMessage());
         }
-    }
-
-    /**
-     * Encode SVG content to RLE format compatible with `buildSVG`.
-     *
-     * @param string $svgContent
-     * @return string
-     */
-    protected function encodeSvgToRle(string $svgContent): string
-    {
-        $rleData = [];
-        $colorPalette = [];
-        $colorIndex = 0;
-        $maxX = 0;
-        $maxY = 0;
-
-        $xml = new SimpleXMLElement($svgContent);
-
-        // Iterate through each SVG element
-        foreach ($xml->children() as $element) {
-            \Log::info(json_encode($element));
-            
-            if ($element->getName() === 'rect') {
-                $x = isset($element['x']) ? (int)$element['x'] : 0;
-                $y = isset($element['y']) ? (int)$element['y'] : 0;
-                $width = isset($element['width']) ? (int)$element['width'] : 0;
-                $height = isset($element['height']) ? (int)$element['height'] : 0;
-                $color = isset($element['fill']) ? (string)$element['fill'] : '#000000';
-
-                // Update max bounds
-                $maxX = max($maxX, $x + $width);
-                $maxY = max($maxY, $y + $height);
-
-                // Assign a color index if it’s not already in the palette
-                if (!isset($colorPalette[$color])) {
-                    $colorPalette[$color] = $colorIndex;
-                    $colorIndex++;
-                }
-                $colorIndexForRle = $colorPalette[$color];
-
-                // Add each row of the rectangle as a separate RLE entry
-                for ($row = 0; $row < $height; $row++) {
-                    $rleData[] = [
-                        'x' => $x,
-                        'y' => $y + $row,
-                        'length' => $width,
-                        'colorIndex' => $colorIndexForRle,
-                    ];
-                }
-            }
-
-            // Additional SVG elements like circles, ellipses, and lines are ignored to meet `buildSVG` expectations
-        }
-
-        // Combine RLE instructions into a single format string
-        return json_encode([
-            'bounds' => [
-                'left' => 0,
-                'top' => 0,
-                'right' => $maxX,
-                'bottom' => $maxY,
-            ],
-            'rects' => array_map(function ($rect) {
-                return [$rect['length'], $rect['colorIndex']];
-            }, $rleData),
-            'palette' => $colorPalette,
-        ]);
     }
 }
