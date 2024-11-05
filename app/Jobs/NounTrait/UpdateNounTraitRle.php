@@ -98,8 +98,10 @@ class UpdateNounTraitRle implements ShouldQueue
 
             // Update the model with the hex data and palette
             $this->nounTrait->update([
-                'hex_data' => $hexData,
-                'palette' => json_encode($colorPalette)
+                'rle_data' => json_encode([
+                    'hex_data' => $hexData,
+                    'palette' => $colorPalette,
+                ])
             ]);
 
         } catch (Exception $e) {
