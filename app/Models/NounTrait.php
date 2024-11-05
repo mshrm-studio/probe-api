@@ -13,6 +13,7 @@ class NounTrait extends Model
         'name',
         'layer',
         'png_path',
+        'rle_data',
         'seed_id',
         'svg_path'
     ];

@@ -18,31 +18,33 @@
 
         <ul style="display:flex;flex-wrap:wrap;">
             @foreach ($lilNouns as $lilNoun)
-                <li style="display:flex;margin-bottom:20px;margin-right:20px;">
-                    @php
-                        $prefix = "data:application/json;base64,";
-                        $jsonString = base64_decode(str_replace($prefix, '', $lilNoun->token_uri));
-                        $jsonObject = json_decode($jsonString);
-                        $imageSource = $jsonObject->image ?? '';
-                    @endphp
+                @if (!empty($lilNoun))
+                    <li style="display:flex;margin-bottom:20px;margin-right:20px;">
+                        @php
+                            $prefix = "data:application/json;base64,";
+                            $jsonString = base64_decode(str_replace($prefix, '', $lilNoun->token_uri));
+                            $jsonObject = json_decode($jsonString);
+                            $imageSource = $jsonObject->image ?? '';
+                        @endphp
 
-                    @if(!empty($imageSource))
-                        <img src="{{ $imageSource }}" alt="Image description here" height="75" width="75" style="margin-right:20px;">
-                    @else
-                        <div style="background-color:black;width:75px;height:75px;margin-right:20px;"></div>
-                    @endif
+                        @if(!empty($imageSource))
+                            <img src="{{ $imageSource }}" alt="Image description here" height="75" width="75" style="margin-right:20px;">
+                        @else
+                            <div style="background-color:black;width:75px;height:75px;margin-right:20px;"></div>
+                        @endif
 
-                    {{-- <img src="https://noun.pics/{{ $lilNoun->token_id }}.svg" height="100" width="100" /> --}}
+                        {{-- <img src="https://noun.pics/{{ $lilNoun->token_id }}.svg" height="100" width="100" /> --}}
 
-                    <div style="width:250px;">
-                        <p style="margin: 1px 0;">token id: {{ $lilNoun->token_id ?? '-' }}</p>
-                        <p style="margin: 1px 0;">background: {{ $lilNoun->background_name ?? '-' }}</p>
-                        <p style="margin: 1px 0;">head: {{ $lilNoun->head_name ?? '-' }}</p>
-                        <p style="margin: 1px 0;">accessory: {{ $lilNoun->accessory_name ?? '-' }}</p>
-                        <p style="margin: 1px 0;">body: {{ $lilNoun->body_name ?? '-' }}</p>
-                        <p style="margin: 1px 0;">glasses: {{ $lilNoun->glasses_name ?? '-' }}</p>
-                    </div> 
-                </li>
+                        <div style="width:250px;">
+                            <p style="margin: 1px 0;">token id: {{ $lilNoun->token_id ?? '-' }}</p>
+                            <p style="margin: 1px 0;">background: {{ $lilNoun->background_name ?? '-' }}</p>
+                            <p style="margin: 1px 0;">head: {{ $lilNoun->head_name ?? '-' }}</p>
+                            <p style="margin: 1px 0;">accessory: {{ $lilNoun->accessory_name ?? '-' }}</p>
+                            <p style="margin: 1px 0;">body: {{ $lilNoun->body_name ?? '-' }}</p>
+                            <p style="margin: 1px 0;">glasses: {{ $lilNoun->glasses_name ?? '-' }}</p>
+                        </div> 
+                    </li>
+                @endif
             @endforeach
         </ul>
     </body>
