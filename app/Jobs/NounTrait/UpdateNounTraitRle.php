@@ -35,7 +35,6 @@ class UpdateNounTraitRle implements ShouldQueue
         }
 
         try {
-            // Load image into Imagick
             $imgContent = Storage::get($this->nounTrait->png_path);
             $imagick = new \Imagick();
             $imagick->readImageBlob($imgContent);
@@ -43,23 +42,9 @@ class UpdateNounTraitRle implements ShouldQueue
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
 
-            $colorPalette = [];
-            $colorIndex = 0;
-            $rleHex = '';
+            $hexData = '0x';
 
-            // Palette Index - Set as '00' for single-palette scenarios
-            $paletteIndexHex = '00';
-
-            // Bounds information
-            $boundsHex = sprintf(
-                '%02x%02x%02x%02x',
-                0, // top
-                $width, // right
-                $height, // bottom
-                0 // left
-            );
-
-            // Iterate through each row to generate RLE hex
+            // Iterate through each row to generate hex color data
             for ($y = 0; $y < $height; $y++) {
                 $prevColor = null;
                 $runLength = 0;
@@ -67,42 +52,30 @@ class UpdateNounTraitRle implements ShouldQueue
                 for ($x = 0; $x < $width; $x++) {
                     // Get color at current pixel
                     $color = $imagick->getImagePixelColor($x, $y)->getColor();
-                    $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
+                    $hexColor = sprintf("%02x%02x%02x", $color['r'], $color['g'], $color['b']);
 
-                    // Register the color in the palette if it’s not already there
-                    if (!isset($colorPalette[$hexColor])) {
-                        $colorPalette[$hexColor] = $colorIndex++;
-                    }
-                    $currentColorIndex = $colorPalette[$hexColor];
-
-                    // Build RLE by checking if we’re continuing a run
-                    if ($prevColor === $currentColorIndex) {
+                    // Build the RLE hex data
+                    if ($hexColor === $prevColor) {
                         $runLength++;
                     } else {
-                        // Close the previous run and start a new one
+                        // Finish the previous color run if applicable
                         if ($prevColor !== null) {
-                            $rleHex .= sprintf('%02x%02x', $runLength, $prevColor);
+                            $hexData .= sprintf('%02x%s', $runLength, $prevColor);
                         }
-                        $prevColor = $currentColorIndex;
+                        // Start a new color
+                        $prevColor = $hexColor;
                         $runLength = 1;
                     }
                 }
+
                 // End of row: finalize any ongoing run
                 if ($prevColor !== null) {
-                    $rleHex .= sprintf('%02x%02x', $runLength, $prevColor);
+                    $hexData .= sprintf('%02x%s', $runLength, $prevColor);
                 }
             }
 
-            // Combine all parts into final hex format
-            $hexData = '0x' . $paletteIndexHex . $boundsHex . $rleHex;
-
-            // Update the model with the hex data and palette
-            $this->nounTrait->update([
-                'rle_data' => json_encode([
-                    'hex_data' => $hexData,
-                    'palette' => $colorPalette,
-                ])
-            ]);
+            // Update the model with the hex data
+            $this->nounTrait->update(['rle_data' => $hexData]);
 
         } catch (Exception $e) {
             \Log::error("Failed to generate RLE for NounTrait ID {$this->nounTrait->id}: " . $e->getMessage());
