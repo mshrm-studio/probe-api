@@ -17,6 +17,10 @@ class NounTraitResource extends JsonResource
     {
         $data = parent::toArray($request);
 
+        $data['png_url'] = $this->png_path
+            ? Storage::url($this->png_path)
+            : null;
+
         $data['svg_url'] = $this->svg_path
             ? Storage::url($this->svg_path)
             : null;
