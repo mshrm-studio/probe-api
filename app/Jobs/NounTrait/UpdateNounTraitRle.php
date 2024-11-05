@@ -31,9 +31,8 @@ class UpdateNounTraitRle implements ShouldQueue
      */
     public function handle(): void
     {
-        // Check if SVG exists
         if (!Storage::exists($this->nounTrait->svg_path)) {
-            throw new Exception("SVG file does not exist at path: {$this->nounTrait->svg_path}");
+            return;
         }
 
         try {
@@ -57,6 +56,8 @@ class UpdateNounTraitRle implements ShouldQueue
         $rleData = [];
         $colorPalette = [];
         $colorIndex = 0;
+        $maxX = 0;
+        $maxY = 0;
 
         $xml = new SimpleXMLElement($svgContent);
 
@@ -68,6 +69,10 @@ class UpdateNounTraitRle implements ShouldQueue
                 $width = isset($element['width']) ? (int)$element['width'] : 0;
                 $height = isset($element['height']) ? (int)$element['height'] : 0;
                 $color = isset($element['fill']) ? (string)$element['fill'] : '#000000';
+
+                // Update max bounds
+                $maxX = max($maxX, $x + $width);
+                $maxY = max($maxY, $y + $height);
 
                 // Assign a color index if it’s not already in the palette
                 if (!isset($colorPalette[$color])) {
@@ -86,6 +91,7 @@ class UpdateNounTraitRle implements ShouldQueue
                     ];
                 }
             }
+            
             // Additional SVG elements like circles, ellipses, and lines are ignored to meet `buildSVG` expectations
         }
 
@@ -94,12 +100,8 @@ class UpdateNounTraitRle implements ShouldQueue
             'bounds' => [
                 'left' => 0,
                 'top' => 0,
-                'right' => !empty(array_column($rleData, 'x')) 
-                    ? max(array_column($rleData, 'x')) + $width 
-                    : $width,
-                'bottom' => !empty(array_column($rleData, 'y')) 
-                    ? max(array_column($rleData, 'y')) + $height 
-                    : $height,
+                'right' => $maxX,
+                'bottom' => $maxY,
             ],
             'rects' => array_map(function ($rect) {
                 return [$rect['length'], $rect['colorIndex']];

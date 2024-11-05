@@ -32,7 +32,7 @@ class UpdateNounTraitPng implements ShouldQueue
     public function handle(): void
     {
         if (!Storage::exists($this->nounTrait->svg_path)) {
-            throw new Exception("SVG file does not exist at path: {$this->nounTrait->svg_path}");
+            return;
         }
 
         try {
