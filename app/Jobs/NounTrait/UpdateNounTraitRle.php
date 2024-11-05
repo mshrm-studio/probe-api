@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\NounTrait;
 use Illuminate\Support\Facades\Storage;
 use Exception;
+use Imagick;
 
 class UpdateNounTraitRle implements ShouldQueue
 {
@@ -30,51 +31,72 @@ class UpdateNounTraitRle implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!Storage::exists($this->nounTrait->png_path)) {
+        if (!Storage::exists($this->nounTrait->svg_path)) {
             return;
         }
 
         try {
+            // Retrieve image content directly using Storage
             $imgContent = Storage::get($this->nounTrait->png_path);
-            $imagick = new \Imagick();
+            $imagick = new Imagick();
             $imagick->readImageBlob($imgContent);
+            $imagick->resizeImage(32, 32, Imagick::FILTER_POINT, 1);
 
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
 
-            $hexData = '0x';
+            $colorPalette = [];
+            $colorIndex = 0;
+            $rleHex = '';
 
-            // Iterate through each row to generate hex color data
+            // Bounds information
+            $paletteIndexHex = '00';  // Set as '00' for single-palette scenarios
+            $boundsHex = sprintf(
+                '%02x%02x%02x%02x',
+                0,          // top
+                $width,     // right
+                $height,    // bottom
+                0           // left
+            );
+
+            // Iterate through each row to generate RLE hex
             for ($y = 0; $y < $height; $y++) {
-                $prevColor = null;
+                $prevColorIndex = null;
                 $runLength = 0;
 
                 for ($x = 0; $x < $width; $x++) {
                     // Get color at current pixel
                     $color = $imagick->getImagePixelColor($x, $y)->getColor();
-                    $hexColor = sprintf("%02x%02x%02x", $color['r'], $color['g'], $color['b']);
+                    $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
 
-                    // Build the RLE hex data
-                    if ($hexColor === $prevColor) {
+                    // Register the color in the palette if it’s not already there
+                    if (!isset($colorPalette[$hexColor])) {
+                        $colorPalette[$hexColor] = $colorIndex++;
+                    }
+                    $currentColorIndex = $colorPalette[$hexColor];
+
+                    // RLE encoding: check if we’re continuing a run of the same color
+                    if ($currentColorIndex === $prevColorIndex) {
                         $runLength++;
                     } else {
-                        // Finish the previous color run if applicable
-                        if ($prevColor !== null) {
-                            $hexData .= sprintf('%02x%s', $runLength, $prevColor);
+                        // Close the previous color run and start a new one
+                        if ($prevColorIndex !== null) {
+                            $rleHex .= sprintf('%02x%02x', $runLength, $prevColorIndex);
                         }
-                        // Start a new color
-                        $prevColor = $hexColor;
+                        $prevColorIndex = $currentColorIndex;
                         $runLength = 1;
                     }
                 }
-
-                // End of row: finalize any ongoing run
-                if ($prevColor !== null) {
-                    $hexData .= sprintf('%02x%s', $runLength, $prevColor);
+                // End of row: finalize any ongoing color run
+                if ($prevColorIndex !== null) {
+                    $rleHex .= sprintf('%02x%02x', $runLength, $prevColorIndex);
                 }
             }
 
-            // Update the model with the hex data
+            // Combine all parts into final hex format
+            $hexData = '0x' . $paletteIndexHex . $boundsHex . $rleHex;
+
+            // Update the model with hex data only, if color index-based RLE is sufficient
             $this->nounTrait->update(['rle_data' => $hexData]);
 
         } catch (Exception $e) {
