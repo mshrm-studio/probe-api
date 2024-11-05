@@ -10,7 +10,6 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\NounTrait;
 use Illuminate\Support\Facades\Storage;
 use Exception;
-use Imagick;
 
 class UpdateNounTraitRle implements ShouldQueue
 {
@@ -37,7 +36,7 @@ class UpdateNounTraitRle implements ShouldQueue
 
         try {
             $imgContent = Storage::get($this->nounTrait->png_path);
-            $imagick = new Imagick();
+            $imagick = new \Imagick();
             $imagick->readImageBlob($imgContent);
 
             $width = $imagick->getImageWidth();
