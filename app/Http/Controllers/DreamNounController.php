@@ -24,7 +24,7 @@ class DreamNounController extends Controller
         $headSeedId = $request->input('head_seed_id', null);
 
         $perPage = $request->input('per_page', 25);
-        $sortProperty = $request->input('sort_property', 'token_id');
+        $sortProperty = $request->input('sort_property', 'created_at');
         $sortMethod = $request->input('sort_method', 'desc');
 
         $dreamNouns = DreamNoun::query()
