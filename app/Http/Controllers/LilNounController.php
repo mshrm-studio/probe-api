@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetLilNounsRequest;
-use App\Http\Requests\StoreLilNounRequest;
-use App\Http\Requests\UpdateLilNounRequest;
+use App\Http\Requests\LilNoun\GetLilNounsRequest;
+use App\Http\Requests\LilNoun\StoreLilNounRequest;
+use App\Http\Requests\LilNoun\UpdateLilNounRequest;
 use App\Models\LilNoun;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Http\Resources\LilNounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,7 +15,7 @@ class LilNounController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GetLilNounsRequest $request): AnonymousResourceCollection|View
+    public function index(GetLilNounsRequest $request): AnonymousResourceCollection
     {
         $accessory = $request->input('accessory', null);
         $body = $request->input('body', null);
@@ -76,11 +75,7 @@ class LilNounController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return LilNounResource::collection($lilNouns);
-        }
-        
-        return view('welcome', ['lilNouns' => $lilNouns]);
+        return LilNounResource::collection($lilNouns);
     }
 
     /**

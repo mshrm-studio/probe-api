@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetNounsRequest;
-use App\Http\Requests\StoreNounRequest;
-use App\Http\Requests\UpdateNounRequest;
+use App\Http\Requests\Noun\GetNounsRequest;
+use App\Http\Requests\Noun\StoreNounRequest;
+use App\Http\Requests\Noun\UpdateNounRequest;
 use App\Models\Noun;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Http\Resources\NounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,7 +15,7 @@ class NounController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GetNounsRequest $request): AnonymousResourceCollection|View
+    public function index(GetNounsRequest $request): AnonymousResourceCollection
     {
         $accessory = $request->input('accessory', null);
         $body = $request->input('body', null);
@@ -76,11 +75,7 @@ class NounController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return NounResource::collection($nouns);
-        }
-        
-        return view('welcome', ['nouns' => $nouns]);
+        return NounResource::collection($nouns);
     }
 
     /**

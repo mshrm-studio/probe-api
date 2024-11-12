@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\LilNounTrait;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreNounRequest extends FormRequest
+class UpdateLilNounTraitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
