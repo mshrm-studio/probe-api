@@ -44,6 +44,7 @@ class NounController extends Controller
                 'glasses_name',
                 'head_index',
                 'head_name',
+                'id',
                 'index',
                 'minted_at',
                 'png_path',
