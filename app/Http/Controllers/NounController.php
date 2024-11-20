@@ -30,15 +30,42 @@ class NounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $nouns = Noun::query()
-            ->whereNotNull('background_name')
-            ->whereNotNull('head_name')
-            ->whereNotNull('body_name')
+            ->select([
+                'accessory_index',
+                'accessory_name',
+                'area',
+                'background_index',
+                'background_name',
+                'block_number',
+                'body_index',
+                'body_name',
+                'color_histogram',
+                'glasses_index',
+                'glasses_name',
+                'head_index',
+                'head_name',
+                'index',
+                'minted_at',
+                'png_path',
+                'svg_path',
+                'token_id',
+                'token_id_last_synced_at',
+                'token_uri',
+                'weight',
+            ])
             ->whereNotNull('accessory_name')
-            ->whereNotNull('glasses_name')
-            ->whereNotNull('token_id')
-            ->whereNotNull('token_uri')
+            ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
+            ->whereNotNull('body_name')
+            ->whereNotNull('body_index')
+            ->whereNotNull('background_name')
+            ->whereNotNull('background_index')
+            ->whereNotNull('glasses_name')
+            ->whereNotNull('glasses_index')
+            ->whereNotNull('head_name')
+            ->whereNotNull('head_index')
             ->whereNotNull('minted_at')
+            ->whereNotNull('token_id')
             ->when(is_array($search), function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     foreach ($search as $term) {
