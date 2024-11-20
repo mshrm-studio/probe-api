@@ -50,7 +50,6 @@ class LilNounController extends Controller
                 'svg_path',
                 'token_id',
                 'token_id_last_synced_at',
-                'token_uri',
                 'weight',
             ])
             ->whereNotNull('accessory_name')
