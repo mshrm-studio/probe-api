@@ -8,6 +8,7 @@ use App\Http\Requests\DreamNoun\UpdateDreamNounRequest;
 use App\Models\DreamNoun;
 use App\Http\Resources\DreamNounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Validation\ValidationException;
 
 class DreamNounController extends Controller
 {
@@ -65,6 +66,21 @@ class DreamNounController extends Controller
      */
     public function store(StoreDreamNounRequest $request): DreamNounResource
     {
+        $dreamersDreamExists = DreamNoun::query()
+            ->where('accessory_seed_id', $request->accessory_seed_id)
+            ->where('background_seed_id', $request->background_seed_id)
+            ->where('body_seed_id', $request->body_seed_id)
+            ->where('dreamer', $request->dreamer)
+            ->where('glasses_seed_id', $request->glasses_seed_id)
+            ->where('head_seed_id', $request->head_seed_id)
+            ->exists();
+
+        if ($dreamersDreamExists) {
+            throw ValidationException::withMessages([
+                'dreamer' => 'This dreamer already has a dream with these traits.',
+            ]);
+        }
+
         $dreamNoun = DreamNoun::create($request->validated());
 
         return new DreamNounResource($dreamNoun);
