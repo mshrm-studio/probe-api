@@ -59,9 +59,14 @@ class GetDreamNounsRequest extends FormRequest
                 'min:1',
                 'max:300'
             ],
+            'search' => [
+                'sometimes',
+                'string',
+                'max:191'
+            ],
             'sort_property' => [
                 'sometimes',
-                'in:created_at,updated_at',
+                'in:id,created_at,updated_at',
             ],
             'sort_method' => [
                 'sometimes',

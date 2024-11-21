@@ -24,6 +24,8 @@ class DreamNounController extends Controller
         $glassesSeedId = $request->input('glasses_seed_id', null);
         $headSeedId = $request->input('head_seed_id', null);
 
+        $search = $request->input('search', null);
+
         $perPage = $request->input('per_page', 25);
         $sortProperty = $request->input('sort_property', 'created_at');
         $sortMethod = $request->input('sort_method', 'desc');
@@ -46,6 +48,24 @@ class DreamNounController extends Controller
             })
             ->when($headSeedId, function ($query) use ($headSeedId) {
                 $query->where('head_seed_id', $headSeedId);
+            })
+            ->when($search, function ($query) use ($search) {
+                $query
+                    ->whereHas('accessory', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('background', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('body', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('glasses', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    })
+                    ->orWhereHas('head', function ($query) use ($search) {
+                        $query->where('name', 'like', "%$search%");
+                    });
             })
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
