@@ -38,6 +38,7 @@ Route::get('noun-colors', GetNounColors::class);
 Route::get('noun-traits', [NounTraitController::class, 'index']);
 
 Route::get('dream-nouns', [DreamNounController::class, 'index']);
+Route::get('dream-nouns/{dream_noun}', [DreamNounController::class, 'show']);
 Route::post('dream-nouns', [DreamNounController::class, 'store']);
 
 /**
