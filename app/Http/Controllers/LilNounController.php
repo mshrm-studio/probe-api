@@ -30,29 +30,6 @@ class LilNounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $lilNouns = LilNoun::query()
-            ->select([
-                'accessory_index',
-                'accessory_name',
-                'area',
-                'background_index',
-                'background_name',
-                'block_number',
-                'body_index',
-                'body_name',
-                'color_histogram',
-                'glasses_index',
-                'glasses_name',
-                'head_index',
-                'head_name',
-                'id',
-                'index',
-                'minted_at',
-                'png_path',
-                'svg_path',
-                'token_id',
-                'token_id_last_synced_at',
-                'weight',
-            ])
             ->whereNotNull('accessory_name')
             ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
