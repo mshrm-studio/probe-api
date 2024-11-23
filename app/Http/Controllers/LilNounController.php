@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetLilNounsRequest;
-use App\Http\Requests\StoreLilNounRequest;
-use App\Http\Requests\UpdateLilNounRequest;
+use App\Http\Requests\LilNoun\GetLilNounsRequest;
+use App\Http\Requests\LilNoun\StoreLilNounRequest;
+use App\Http\Requests\LilNoun\UpdateLilNounRequest;
 use App\Models\LilNoun;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Http\Resources\LilNounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,7 +15,7 @@ class LilNounController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GetLilNounsRequest $request): AnonymousResourceCollection|View
+    public function index(GetLilNounsRequest $request): AnonymousResourceCollection
     {
         $accessory = $request->input('accessory', null);
         $body = $request->input('body', null);
@@ -31,15 +30,19 @@ class LilNounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $lilNouns = LilNoun::query()
-            ->whereNotNull('background_name')
-            ->whereNotNull('head_name')
-            ->whereNotNull('body_name')
             ->whereNotNull('accessory_name')
-            ->whereNotNull('glasses_name')
-            ->whereNotNull('token_id')
-            ->whereNotNull('token_uri')
+            ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
+            ->whereNotNull('body_name')
+            ->whereNotNull('body_index')
+            ->whereNotNull('background_name')
+            ->whereNotNull('background_index')
+            ->whereNotNull('glasses_name')
+            ->whereNotNull('glasses_index')
+            ->whereNotNull('head_name')
+            ->whereNotNull('head_index')
             ->whereNotNull('minted_at')
+            ->whereNotNull('token_id')
             ->when(is_array($search), function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     foreach ($search as $term) {
@@ -76,11 +79,7 @@ class LilNounController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return LilNounResource::collection($lilNouns);
-        }
-        
-        return view('welcome', ['lilNouns' => $lilNouns]);
+        return LilNounResource::collection($lilNouns);
     }
 
     /**

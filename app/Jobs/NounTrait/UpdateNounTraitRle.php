@@ -9,7 +9,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\NounTrait;
 use Illuminate\Support\Facades\Storage;
-use Exception;
 
 class UpdateNounTraitRle implements ShouldQueue
 {
@@ -17,62 +16,75 @@ class UpdateNounTraitRle implements ShouldQueue
 
     protected $nounTrait;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(NounTrait $nounTrait)
     {
         $this->nounTrait = $nounTrait;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
+        if (!Storage::exists($this->nounTrait->svg_path)) {
+            return;
+        }
+
         try {
             $imgContent = Storage::get($this->nounTrait->png_path);
             $imagick = new \Imagick();
             $imagick->readImageBlob($imgContent);
+            $imagick->setImageFormat("png");
             $imagick->resizeImage(32, 32, Imagick::FILTER_POINT, 1);
 
             $width = $imagick->getImageWidth();
             $height = $imagick->getImageHeight();
 
+            // Initialize variables
             $colorPalette = [];
             $colorIndex = 0;
             $rleHex = '';
+            $minX = $width;
+            $minY = $height;
+            $maxX = 0;
+            $maxY = 0;
 
-            // Bounds: Placeholder for single-palette scenarios
-            $paletteIndexHex = '00';
-            $boundsHex = sprintf('%02x%02x%02x%02x',
-                0, // top
-                $width, // right
-                $height, // bottom
-                0 // left
-            );
-
-            // Iterate over each row for RLE hex generation
+            // Determine bounds around non-transparent pixels
             for ($y = 0; $y < $height; $y++) {
+                for ($x = 0; $x < $width; $x++) {
+                    $color = $imagick->getImagePixelColor($x, $y)->getColor();
+                    $alpha = $imagick->getImagePixelColor($x, $y)->getColorValue(\Imagick::COLOR_ALPHA);
+
+                    if ($alpha < 1) {  // Non-transparent pixel
+                        $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
+
+                        // Track bounds
+                        $minX = min($minX, $x);
+                        $minY = min($minY, $y);
+                        $maxX = max($maxX, $x);
+                        $maxY = max($maxY, $y);
+
+                        // Assign palette index
+                        if (!isset($colorPalette[$hexColor])) {
+                            $colorPalette[$hexColor] = $colorIndex++;
+                        }
+                    }
+                }
+            }
+
+            // RLE Encode within the bounds
+            for ($y = $minY; $y <= $maxY; $y++) {
                 $prevColorIndex = null;
                 $runLength = 0;
 
-                for ($x = 0; $x < $width; $x++) {
-                    // Get color at current pixel
+                for ($x = $minX; $x <= $maxX; $x++) {
                     $color = $imagick->getImagePixelColor($x, $y)->getColor();
-                    $hexColor = sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b']);
+                    $alpha = $imagick->getImagePixelColor($x, $y)->getColorValue(\Imagick::COLOR_ALPHA);
 
-                    // Assign a color index if not yet in palette
-                    if (!isset($colorPalette[$hexColor])) {
-                        $colorPalette[$hexColor] = $colorIndex++;
-                    }
-                    $currentColorIndex = $colorPalette[$hexColor];
+                    // Handle transparency as index 0 in palette
+                    $currentColorIndex = $alpha < 1 ? $colorPalette[sprintf("#%02x%02x%02x", $color['r'], $color['g'], $color['b'])] : 0;
 
-                    // Create RLE by tracking color runs
+                    // Perform RLE by counting consecutive pixels of the same color
                     if ($currentColorIndex === $prevColorIndex) {
                         $runLength++;
                     } else {
-                        // Close previous run
                         if ($prevColorIndex !== null) {
                             $rleHex .= sprintf('%02x%02x', $runLength, $prevColorIndex);
                         }
@@ -80,20 +92,20 @@ class UpdateNounTraitRle implements ShouldQueue
                         $runLength = 1;
                     }
                 }
-
-                // Finalize any ongoing run at the row end
                 if ($prevColorIndex !== null) {
                     $rleHex .= sprintf('%02x%02x', $runLength, $prevColorIndex);
                 }
             }
 
-            // Construct the final hex format
+            // Construct the final hex format (including bounds and palette index)
+            $paletteIndexHex = '00';
+            $boundsHex = sprintf('%02x%02x%02x%02x', $minY, $maxX - $minX + 1, $maxY - $minY + 1, $minX);
             $hexData = '0x' . $paletteIndexHex . $boundsHex . $rleHex;
 
-            // Save the RLE data to the model
+            // Update model with encoded hex data
             $this->nounTrait->update(['rle_data' => $hexData]);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             \Log::error("Failed to generate RLE for NounTrait ID {$this->nounTrait->id}: " . $e->getMessage());
         }
     }

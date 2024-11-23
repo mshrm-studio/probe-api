@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\GetNounsRequest;
-use App\Http\Requests\StoreNounRequest;
-use App\Http\Requests\UpdateNounRequest;
+use App\Http\Requests\Noun\GetNounsRequest;
+use App\Http\Requests\Noun\StoreNounRequest;
+use App\Http\Requests\Noun\UpdateNounRequest;
 use App\Models\Noun;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Http\Resources\NounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
@@ -16,7 +15,7 @@ class NounController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(GetNounsRequest $request): AnonymousResourceCollection|View
+    public function index(GetNounsRequest $request): AnonymousResourceCollection
     {
         $accessory = $request->input('accessory', null);
         $body = $request->input('body', null);
@@ -31,15 +30,42 @@ class NounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $nouns = Noun::query()
-            ->whereNotNull('background_name')
-            ->whereNotNull('head_name')
-            ->whereNotNull('body_name')
+            ->select([
+                'accessory_index',
+                'accessory_name',
+                'area',
+                'background_index',
+                'background_name',
+                'block_number',
+                'body_index',
+                'body_name',
+                'color_histogram',
+                'glasses_index',
+                'glasses_name',
+                'head_index',
+                'head_name',
+                'id',
+                'index',
+                'minted_at',
+                'png_path',
+                'svg_path',
+                'token_id',
+                'token_id_last_synced_at',
+                'weight',
+            ])
             ->whereNotNull('accessory_name')
-            ->whereNotNull('glasses_name')
-            ->whereNotNull('token_id')
-            ->whereNotNull('token_uri')
+            ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
+            ->whereNotNull('body_name')
+            ->whereNotNull('body_index')
+            ->whereNotNull('background_name')
+            ->whereNotNull('background_index')
+            ->whereNotNull('glasses_name')
+            ->whereNotNull('glasses_index')
+            ->whereNotNull('head_name')
+            ->whereNotNull('head_index')
             ->whereNotNull('minted_at')
+            ->whereNotNull('token_id')
             ->when(is_array($search), function ($query) use ($search) {
                 $query->where(function ($query) use ($search) {
                     foreach ($search as $term) {
@@ -76,11 +102,7 @@ class NounController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return NounResource::collection($nouns);
-        }
-        
-        return view('welcome', ['nouns' => $nouns]);
+        return NounResource::collection($nouns);
     }
 
     /**

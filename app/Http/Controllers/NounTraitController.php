@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreNounTraitRequest;
-use App\Http\Requests\UpdateNounTraitRequest;
+use App\Http\Requests\NounTrait\GetNounTraitsRequest;
+use App\Http\Requests\NounTrait\StoreNounTraitRequest;
+use App\Http\Requests\NounTrait\UpdateNounTraitRequest;
 use App\Models\NounTrait;
-use Illuminate\View\View;
 use App\Http\Resources\NounTraitResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Http\Requests\GetNounTraitsRequest;
 
 class NounTraitController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(GetNounTraitsRequest $request): AnonymousResourceCollection|View
+    public function index(GetNounTraitsRequest $request): AnonymousResourceCollection
     {
         $layer = $request->input('layer', null);
         $perPage = $request->input('per_page', 25);
@@ -27,11 +26,7 @@ class NounTraitController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return NounTraitResource::collection($traits);
-        }
-        
-        return view('welcome', ['traits' => $traits]);
+        return NounTraitResource::collection($traits);
     }
 
     /**

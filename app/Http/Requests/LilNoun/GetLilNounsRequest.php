@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\LilNoun;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class GetLilNounTraitsRequest extends FormRequest
+class GetLilNounsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,15 +23,35 @@ class GetLilNounTraitsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'layer' => [
+            'accessory' => [
                 'sometimes',
-                'in:body,accessory,glasses,head,background'
+                'exists:lil_noun_traits,name'
+            ],
+            'background' => [
+                'sometimes',
+                'exists:lil_noun_traits,name'
+            ],
+            'body' => [
+                'sometimes',
+                'exists:lil_noun_traits,name'
+            ],
+            'color' => [
+                'sometimes',
+                'string'
+            ],
+            'glasses' => [
+                'sometimes',
+                'exists:lil_noun_traits,name'
+            ],
+            'head' => [
+                'sometimes',
+                'exists:lil_noun_traits,name'
             ],
             'per_page' => [
                 'sometimes',
                 'integer',
                 'min:1',
-                'max:500'
+                'max:300'
             ],
             'search' => [
                 'sometimes',
@@ -39,7 +60,7 @@ class GetLilNounTraitsRequest extends FormRequest
             ],
             'sort_property' => [
                 'sometimes',
-                'in:name',
+                'in:minted_at,token_id,weight,area',
             ],
             'sort_method' => [
                 'sometimes',

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Noun;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class GetLilNounsRequest extends FormRequest
+class GetNounsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,27 +25,27 @@ class GetLilNounsRequest extends FormRequest
         return [
             'accessory' => [
                 'sometimes',
-                'exists:lil_noun_traits,name'
+                'exists:noun_traits,name'
             ],
             'background' => [
                 'sometimes',
-                'exists:lil_noun_traits,name'
-            ],
-            'body' => [
-                'sometimes',
-                'exists:lil_noun_traits,name'
+                'exists:noun_traits,name'
             ],
             'color' => [
                 'sometimes',
-                'string'
+                'string',
+            ],
+            'body' => [
+                'sometimes',
+                'exists:noun_traits,name'
             ],
             'glasses' => [
                 'sometimes',
-                'exists:lil_noun_traits,name'
+                'exists:noun_traits,name'
             ],
             'head' => [
                 'sometimes',
-                'exists:lil_noun_traits,name'
+                'exists:noun_traits,name'
             ],
             'per_page' => [
                 'sometimes',

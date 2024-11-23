@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreLilNounTraitRequest;
-use App\Http\Requests\UpdateLilNounTraitRequest;
+use App\Http\Requests\LilNounTrait\GetLilNounTraitsRequest;
+use App\Http\Requests\LilNounTrait\StoreLilNounTraitRequest;
+use App\Http\Requests\LilNounTrait\UpdateLilNounTraitRequest;
 use App\Models\LilNounTrait;
-use Illuminate\View\View;
 use App\Http\Resources\LilNounTraitResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use App\Http\Requests\GetLilNounTraitsRequest;
 
 class LilNounTraitController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(GetLilNounTraitsRequest $request): AnonymousResourceCollection|View
+    public function index(GetLilNounTraitsRequest $request): AnonymousResourceCollection
     {
         $layer = $request->input('layer', null);
         $perPage = $request->input('per_page', 25);
@@ -27,11 +26,7 @@ class LilNounTraitController extends Controller
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);
 
-        if ($request->expectsJson()) {
-            return LilNounTraitResource::collection($traits);
-        }
-        
-        return view('welcome', ['traits' => $traits]);
+        return LilNounTraitResource::collection($traits);
     }
 
     /**

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\DreamNoun;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateNounRequest extends FormRequest
+class UpdateDreamNounRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
