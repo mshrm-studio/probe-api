@@ -31,6 +31,7 @@ class Noun extends Model
         'index',
         'minted_at',
         'png_path',
+        'settled_by_address',
         'svg_path',
         'token_id',
         'token_id_last_synced_at',
