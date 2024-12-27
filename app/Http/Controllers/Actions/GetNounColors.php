@@ -14,7 +14,7 @@ class GetNounColors extends Controller
      */
     public function __invoke(Request $request)
     {
-        $colors = Cache::remember('Noun-Colors', now()->addWeek(), function () {
+        $colors = Cache::remember('Noun-Colors', now()->addDay(), function () {
             $colorHistograms = Noun::pluck('color_histogram');
 
             $allColors = [];
