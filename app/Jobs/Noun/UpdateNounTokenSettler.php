@@ -11,7 +11,7 @@ use App\Models\Noun;
 use App\Services\NounsService;
 use Exception;
 
-class UpdateNounSettledByAddress implements ShouldQueue
+class UpdateNounTokenSettler implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
