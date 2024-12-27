@@ -15,16 +15,16 @@ class LilNounsService extends BaseNounsService {
 
         $seconds = 300;
 
-        $fileName = 'lil-nouns-contract-abi-v2';
+        $tokenContractAbiFileName = 'lil-nouns-contract-abi-v2';
 
-        $abi = Cache::remember($fileName, $seconds, function () use ($fileName) {
-            $abiUrl = Storage::url('lils/abi/'. $fileName .'.json');
+        $tokenContractAbi = Cache::remember($tokenContractAbiFileName, $seconds, function () use ($tokenContractAbiFileName) {
+            $abiUrl = Storage::url('lils/abi/'. $tokenContractAbiFileName .'.json');
             $response = Http::get($abiUrl);
             return $response->json();
         });
 
-        $this->contract = new Contract($web3->provider, json_encode($abi));
-        $this->contractAddress = config('services.lil_nouns.contract.token_address');
-        $this->contract->at($this->contractAddress);
+        $this->tokenContract = new Contract($web3->provider, json_encode($tokenContractAbi));
+        $this->tokenContractAddress = config('services.lil_nouns.contract.token_address');
+        $this->tokenContract->at($this->tokenContractAddress);
     }
 }

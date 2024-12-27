@@ -21,6 +21,7 @@ return [
 
     'nouns' => [
         'contract' => [
+            'auction_house_address' => env('NOUNS_AUCTION_HOUSE_CONTRACT_ADDRESS'),
             'token_address' => env('NOUNS_TOKEN_CONTRACT_ADDRESS')
         ]
     ],

@@ -8,8 +8,9 @@ use Web3\Utils;
 
 class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     protected $web3;
-    protected $contractAddress;
-    protected $contract;
+    protected $auctionHouseContractAddress;
+    protected $tokenContractAddress;
+    protected $tokenContract;
     
     public function getMintEvent(int $tokenId): array 
     {
@@ -18,7 +19,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         $filters = [
             'fromBlock' => '0x0',  // Start searching from the first block
             'toBlock' => 'latest', // Search until the latest block
-            'address' => $this->contractAddress, // The contract address
+            'address' => $this->tokenContractAddress, // The token contract address
             'topics' => [
                 Utils::sha3('Transfer(address,address,uint256)'), // This is the topic for the Transfer event
                 null, // The 'from' address, which is null for mint events (zero address)
@@ -63,7 +64,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     {
         $totalSupply = 0;
 
-        $this->contract->call('totalSupply', [], function ($err, $result) use (&$totalSupply) {
+        $this->tokenContract->call('totalSupply', [], function ($err, $result) use (&$totalSupply) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
@@ -82,7 +83,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     {
         $tokenId = null;
 
-        $this->contract->call('tokenByIndex', $index, function ($err, $result) use (&$tokenId) {
+        $this->tokenContract->call('tokenByIndex', $index, function ($err, $result) use (&$tokenId) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
@@ -101,7 +102,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     {
         $tokenURI = null;
 
-        $this->contract->call('tokenURI', $tokenId, function ($err, $result) use (&$tokenURI) {
+        $this->tokenContract->call('tokenURI', $tokenId, function ($err, $result) use (&$tokenURI) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
@@ -118,7 +119,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     {
         $seeds = [];
 
-        $this->contract->call('seeds', $tokenId, function ($err, $result) use (&$seeds) {
+        $this->tokenContract->call('seeds', $tokenId, function ($err, $result) use (&$seeds) {
             if ($err) {
                 throw new \Exception($err->getMessage());
             }
@@ -131,5 +132,44 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         });
 
         return $seeds;
+    }
+
+    public function getAuctionLogs(string $blockNumber): array
+    {
+        $logs = [];
+
+        $filters = [
+            'fromBlock' => $blockNumber,
+            'toBlock' => $blockNumber,
+            'address' => $this->auctionHouseContractAddress,
+            'topics' => [
+                Utils::sha3('AuctionSettled(uint256,uint256,address)'), // Event signature hash
+            ],
+        ];
+
+        $this->web3->eth->getLogs($filters, function ($err, $result) use (&$logs) {
+            if ($err) {
+                throw new \Exception($err->getMessage());
+            }
+
+            $logs = $result;
+        });
+
+        return $logs;
+    }
+
+    public function getTransaction(string $transactionHash): array
+    {
+        $transactionDetails = [];
+
+        $this->web3->eth->getTransactionByHash($transactionHash, function ($err, $transaction) use (&$transactionDetails) {
+            if ($err) {
+                throw new \Exception($err->getMessage());
+            }
+
+            $transactionDetails = is_object($transaction) ? (array) $transaction : $transaction;
+        });
+
+        return $transactionDetails;
     }
 }
