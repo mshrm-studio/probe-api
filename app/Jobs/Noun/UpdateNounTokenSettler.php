@@ -56,7 +56,7 @@ class UpdateNounTokenSettler implements ShouldQueue
                     }
                 }
             } else {
-                throw new Exception('No auction logs found for block number ' . $blockNumber);
+                throw new Exception('No auction logs found for block number ' . $noun->block_number);
             }
         } catch (Exception $e) {
             throw new Exception('Failed to fetch "Settled" auction events: ' . $e->getMessage());
