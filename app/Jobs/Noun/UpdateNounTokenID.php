@@ -55,6 +55,7 @@ class UpdateNounTokenID implements ShouldQueue
                         'body_name' => null,
                         'block_number' => null,
                         'minted_at' => null,
+                        'settled_by_address' => null,
                         'token_uri' => null,
                         'token_id' => $tokenId,
                         'token_id_last_synced_at' => now(),
