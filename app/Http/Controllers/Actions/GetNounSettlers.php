@@ -13,9 +13,9 @@ class GetNounSettlers extends Controller
      * Handle the incoming request.
      */
     public function __invoke(Request $request)
-    {
-        $settlers = Cache::remember('Noun-Settlers', now()->addWeek(), function () {
-            $settlers = Noun::pluck('settled_by_address');    
+    {        
+        $settlers = Cache::remember('Noun-Settlers', now()->addDay(), function () {
+            $settlers = Noun::pluck('settled_by_address')->toArray();    
             $uniqueSettlers = array_unique($settlers); // Filter out duplicate colors
             return array_values($uniqueSettlers); // Re-index array to ensure JSON array format
         });

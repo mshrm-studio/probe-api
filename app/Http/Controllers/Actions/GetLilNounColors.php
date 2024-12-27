@@ -14,7 +14,7 @@ class GetLilNounColors extends Controller
      */
     public function __invoke(Request $request)
     {
-        $colors = Cache::remember('LilNoun-Colors', now()->addWeek(), function () {
+        $colors = Cache::remember('LilNoun-Colors', now()->addDay(), function () {
             $colorHistograms = LilNoun::pluck('color_histogram');
 
             $allColors = [];
