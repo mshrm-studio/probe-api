@@ -29,6 +29,17 @@ class SyncNounTotalSupply implements ShouldQueue
      */
     public function handle(NounsService $service): void
     {
+        // Check if any noun was minted within the last 24 hours
+        $recentlyMintedNoun = Noun::query()
+            ->whereNull('minted_at')
+            ->orWhere('minted_at', '>', now()->subDay())
+            ->exists();
+
+        // Exit early if a noun has been minted in the last 24 hours
+        if ($recentlyMintedNoun) {
+            return;
+        }
+
         $totalSupply = $service->getTotalSupply();
 
         if ($totalSupply > 0) {

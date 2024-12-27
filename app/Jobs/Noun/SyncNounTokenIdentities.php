@@ -33,7 +33,7 @@ class SyncNounTokenIdentities implements ShouldQueue
                 $query
                     ->whereNull('token_id')
                     ->orWhereNull('token_id_last_synced_at')
-                    ->orWhere('token_id_last_synced_at', '<', now()->subDay());
+                    ->orWhere('token_id_last_synced_at', '<', now()->subDays(3));
             })
             ->whereNotNull('index')
             ->orderBy('id', 'desc')
