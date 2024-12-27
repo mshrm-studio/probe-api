@@ -33,7 +33,7 @@ class SyncNounTokenImages implements ShouldQueue
         $nounsWithoutTokenUri = Noun::query()
             ->whereNull('token_uri')
             ->whereNotNull('token_id')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nounsWithoutTokenUri as $noun) {
@@ -43,7 +43,7 @@ class SyncNounTokenImages implements ShouldQueue
         $nounsWithoutSvg = Noun::query()
             ->whereNull('svg_path')
             ->whereNotNull('token_uri')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nounsWithoutSvg as $noun) {
@@ -53,7 +53,7 @@ class SyncNounTokenImages implements ShouldQueue
         $nounsWithoutPng = Noun::query()
             ->whereNull('png_path')
             ->whereNotNull('svg_path')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nounsWithoutPng as $noun) {

@@ -34,7 +34,7 @@ class SyncNounTokenSeedNames implements ShouldQueue
             ->orWhereNull('accessory_name')
             ->orWhereNull('head_name')
             ->orWhereNull('glasses_name')
-            ->limit(50)
+            ->limit(25)
             ->get();
             
         $traits = NounTrait::all();

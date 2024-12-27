@@ -31,7 +31,7 @@ class SyncNounTokenSettlers implements ShouldQueue
         $nouns = Noun::query()
             ->whereNotNull('block_number')
             ->whereNull('settler_by_address')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nouns as $noun) {

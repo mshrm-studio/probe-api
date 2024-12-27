@@ -38,7 +38,7 @@ class SyncLilNounTokenSeeds implements ShouldQueue
                     ->orWhereNull('head_index')
                     ->orWhereNull('glasses_index');
             })
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($lilNouns as $lilNoun) {

@@ -33,7 +33,7 @@ class SyncLilNounTokenImages implements ShouldQueue
         $lilNouns = LilNoun::query()
             ->whereNull('token_uri')
             ->whereNotNull('token_id')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($lilNouns as $lilNoun) {
@@ -43,7 +43,7 @@ class SyncLilNounTokenImages implements ShouldQueue
         $lilNounsWithoutSvg = LilNoun::query()
             ->whereNull('svg_path')
             ->whereNotNull('token_uri')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($lilNounsWithoutSvg as $lilNoun) {
@@ -53,7 +53,7 @@ class SyncLilNounTokenImages implements ShouldQueue
         $lilNounsWithoutPng = LilNoun::query()
             ->whereNull('png_path')
             ->whereNotNull('svg_path')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($lilNounsWithoutPng as $lilNoun) {

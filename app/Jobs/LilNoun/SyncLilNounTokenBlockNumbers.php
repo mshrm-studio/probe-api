@@ -31,7 +31,7 @@ class SyncLilNounTokenBlockNumbers implements ShouldQueue
         $lilNouns = LilNoun::query()
             ->whereNull('block_number')
             ->whereNotNull('token_id')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($lilNouns as $lilNoun) {
