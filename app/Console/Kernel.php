@@ -20,6 +20,7 @@ use App\Jobs\Noun\SyncNounTokenSeedNames;
 use App\Jobs\Noun\SyncNounTokenBlockNumbers;
 use App\Jobs\Noun\SyncNounTokenMintTimes;
 use App\Jobs\Noun\SyncNounTokenColors;
+use App\Jobs\Noun\SyncNounTokenSettlers;
 use App\Jobs\NounTrait\SyncNounTraitImages;
 
 class Kernel extends ConsoleKernel
