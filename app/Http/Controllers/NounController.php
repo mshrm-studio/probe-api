@@ -23,6 +23,7 @@ class NounController extends Controller
         $glasses = $request->input('glasses', null);
         $head = $request->input('head', null);
         $background = $request->input('background', null);
+        $settler = $request->input('settler', null);
 
         $search = is_string($request->search) ? explode(',', $request->search) : null;
         $perPage = $request->input('per_page', 25);
@@ -30,29 +31,6 @@ class NounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $nouns = Noun::query()
-            ->select([
-                'accessory_index',
-                'accessory_name',
-                'area',
-                'background_index',
-                'background_name',
-                'block_number',
-                'body_index',
-                'body_name',
-                'color_histogram',
-                'glasses_index',
-                'glasses_name',
-                'head_index',
-                'head_name',
-                'id',
-                'index',
-                'minted_at',
-                'png_path',
-                'svg_path',
-                'token_id',
-                'token_id_last_synced_at',
-                'weight',
-            ])
             ->whereNotNull('accessory_name')
             ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
@@ -98,6 +76,9 @@ class NounController extends Controller
             })
             ->when(is_string($background), function ($query) use ($background) {
                 $query->where('background_name', $background);
+            })
+            ->when(is_string($settler), function ($query) use ($settler) {
+                $query->where('settled_by_address', $settler);
             })
             ->orderBy($sortProperty, $sortMethod)
             ->paginate($perPage);

@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\Noun;
 use App\Services\NounsService;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 
 class UpdateNounTokenSettler implements ShouldQueue
 {
@@ -41,6 +42,8 @@ class UpdateNounTokenSettler implements ShouldQueue
             // Fetch logs for this block
             $logs = $service->getAuctionLogs($noun->block_number);
 
+            \Log::info('Auction logs', json_encode($logs));
+
             if (is_array($logs) && count($logs) === 1) {
                 $auctionEvent = $logs[0];
 
@@ -51,6 +54,7 @@ class UpdateNounTokenSettler implements ShouldQueue
                     if (isset($transaction['from'])) {
                         // Update settled address
                         $noun->update(['settled_by_address' => $transaction['from']]);
+                        Cache::forget('Noun-Settlers');
                     } else {
                         throw new Exception('Transaction "from" address not found.');
                     }
