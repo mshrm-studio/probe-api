@@ -33,7 +33,7 @@ class SyncNounTraitImages implements ShouldQueue
             ->inRandomOrder()
             ->whereNull('png_path')
             ->whereNotNull('svg_path')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nounTraitsWithNoPngPath as $nounTrait) {
@@ -44,7 +44,7 @@ class SyncNounTraitImages implements ShouldQueue
             ->inRandomOrder()
             ->whereNull('rle_data')
             ->whereNotNull('png_path')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nounTraitsWithNoRleData as $nounTrait) {

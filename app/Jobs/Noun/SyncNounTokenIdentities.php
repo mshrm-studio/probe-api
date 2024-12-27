@@ -37,7 +37,7 @@ class SyncNounTokenIdentities implements ShouldQueue
             })
             ->whereNotNull('index')
             ->orderBy('id', 'desc')
-            ->limit(50)
+            ->limit(25)
             ->get();
 
         foreach ($nouns as $noun) {
