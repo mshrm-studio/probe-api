@@ -134,24 +134,18 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         return $seeds;
     }
 
-    public function getAuctionLogs(int $tokenId, string $blockNumber): array
+    public function getAuctionLogs(string $blockNumber): array
     {
         $logs = [];
 
-        $fromBlock = '0x' . dechex(hexdec($blockNumber) - 50);
-        // this block number is the mint event of the token contract
-        // using only as a rough guide
-
         $filters = [
-            'fromBlock' => $fromBlock,
-            'toBlock' => 'latest',
+            'fromBlock' => $blockNumber,
+            'toBlock' => $blockNumber,
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
                 [
                     Utils::sha3('AuctionSettled(uint256,address,uint256)'),
-                    Utils::sha3('AuctionSettledWithClientId(uint256,uint32)')
                 ],
-                '0x' . str_pad(dechex($tokenId), 64, '0', STR_PAD_LEFT)
             ],
         ];
 
