@@ -34,7 +34,7 @@ class NounsService extends BaseNounsService {
         // AUCTION HOUSE CONTRACT
 
         $auctionHouseContractAbiFileName = config('app.env') == 'production'
-            ? 'nouns-auction-house-contract-abi'
+            ? 'nouns-auction-house-contract-abi-v2'
             : 'nouns-auction-house-contract-abi-sepolia';
 
         $auctionHouseContractAbi = Cache::remember($auctionHouseContractAbiFileName, $seconds, function () use ($auctionHouseContractAbiFileName) {
