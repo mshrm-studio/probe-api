@@ -138,8 +138,12 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
     {
         $logs = [];
 
+        $fromBlock = '0x' . dechex(hexdec($blockNumber) - 50);
+        // this block number is the mint event of the token contract
+        // using only as a rough guide
+
         $filters = [
-            'fromBlock' => '0x0',
+            'fromBlock' => $fromBlock,
             'toBlock' => 'latest',
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
