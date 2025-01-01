@@ -15,11 +15,11 @@ class GetNounSettlers extends Controller
     public function __invoke(Request $request)
     {        
         $settlers = Cache::remember('Noun-Settlers', now()->addDay(), function () {
-            return Noun::whereNotNull('settled_by_address') // Ignore null values
+            $addresses = Noun::whereNotNull('settled_by_address')
                 ->pluck('settled_by_address')
-                ->map(fn($address) => strtolower($address))
-                ->unqiue()
-                ->values();
+                ->toArray();
+
+            return array_values(array_unique(array_map('strtolower', $addresses)));
         });
     
         return response()->json($settlers);
