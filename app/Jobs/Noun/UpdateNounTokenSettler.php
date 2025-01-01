@@ -31,6 +31,8 @@ class UpdateNounTokenSettler implements ShouldQueue
      */
     public function handle(NounsService $service): void
     {
+        \Log::info('Updating token settler for noun ID ' . $this->noun->id);
+        
         $noun = Noun::findOrFail($this->noun->id);
 
         // Ensure required fields exist
