@@ -32,7 +32,7 @@ class SyncNounTokenSettlers implements ShouldQueue
             ->whereNotNull('block_number')
             ->whereNull('settled_by_address')
             ->orderByDesc('id')
-            ->limit(1)
+            ->limit(10)
             ->get();
 
         foreach ($nouns as $noun) {
