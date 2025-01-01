@@ -42,7 +42,7 @@ class UpdateNounTokenSettler implements ShouldQueue
 
         try {
             // Fetch logs for this block
-            $logs = $service->getAuctionLogs($noun->block_number);
+            $logs = $service->getAuctionLogs($noun->token_id, $noun->block_number);
 
             \Log::info('Auction logs: ' . json_encode($logs));
 

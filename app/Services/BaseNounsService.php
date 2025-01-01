@@ -134,7 +134,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         return $seeds;
     }
 
-    public function getAuctionLogs(string $blockNumber): array
+    public function getAuctionLogs(int $tokenId, string $blockNumber): array
     {
         $logs = [];
 
@@ -144,9 +144,10 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
                 [
-                    Utils::sha3('AuctionSettled(uint256,uint256,address)'),
+                    Utils::sha3('AuctionSettled(uint256,address,uint256)'),
                     Utils::sha3('AuctionSettledWithClientId(uint256,uint32)')
-                ]
+                ],
+                '0x' . str_pad(dechex($tokenId), 64, '0', STR_PAD_LEFT)
             ],
         ];
 
