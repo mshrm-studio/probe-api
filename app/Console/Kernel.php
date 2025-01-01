@@ -95,7 +95,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenBlockNumbers, 'nouns')->everyTenMinutes();
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyTenMinutes();
             $schedule->job(new SyncNounTokenColors, 'nouns')->everyTenMinutes();
-            $schedule->job(new SyncNounTokenSettlers, 'nouns')->everyMinute();
+            $schedule->job(new SyncNounTokenSettlers, 'nouns')->everyTenMinutes();
 
             // $schedule->job(new SyncNounTraitImages, 'nouns')->everyMinute();
         }
