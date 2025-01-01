@@ -139,8 +139,8 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         $logs = [];
 
         $filters = [
-            'fromBlock' => $blockNumber,
-            'toBlock' => $blockNumber,
+            'fromBlock' => hexdec($blockNumber),
+            'toBlock' => hexdec($blockNumber),
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
                 Utils::sha3('AuctionSettled(uint256,uint256,address)'),
@@ -149,6 +149,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         ];
 
         \Log::info('Auction logs filters: ' . json_encode($filters));
+        
 
         $this->web3->eth->getLogs($filters, function ($err, $result) use (&$logs) {
             if ($err) {
