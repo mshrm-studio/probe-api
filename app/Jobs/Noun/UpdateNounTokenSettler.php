@@ -79,7 +79,9 @@ class UpdateNounTokenSettler implements ShouldQueue
             // ]
 
             if (is_array($logs) && count($logs) > 0) {
-                $auctionEvent = $logs[0]; // tx hashes assumed to be the same for all logs.
+                $auctionEvent = (array) $logs[0]; 
+                // tx hashes assumed to be the same for all logs.
+                // Convert stdClass to array
 
                 \Log::info('Auction event: ' . json_encode($auctionEvent));
 
