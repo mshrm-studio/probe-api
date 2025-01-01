@@ -139,7 +139,7 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         $logs = [];
 
         $filters = [
-            'fromBlock' => '0x' . dechex(hexdec($blockNumber) - 50),
+            'fromBlock' => '0x' . dechex(hexdec($blockNumber) - 5000),
             'toBlock' => 'latest',
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
