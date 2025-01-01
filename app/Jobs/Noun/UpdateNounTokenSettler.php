@@ -31,13 +31,13 @@ class UpdateNounTokenSettler implements ShouldQueue
      */
     public function handle(NounsService $service): void
     {
-        \Log::info('Updating token settler for noun ID ' . $this->noun->id);
+        \Log::info('Updating token settler for noun token ' . $this->noun->token_id);
         
         $noun = Noun::findOrFail($this->noun->id);
 
         // Ensure required fields exist
         if (is_null($noun->block_number) || is_null($noun->token_id)) {
-            throw new Exception('Block number or token ID is missing for noun ID ' . $noun->id);
+            throw new Exception('Block number or token ID is missing for noun token ' . $noun->token_id);
         }
 
         try {
