@@ -139,8 +139,8 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
         $logs = [];
 
         $filters = [
-            'fromBlock' => '0x' . dechex(hexdec($blockNumber) - 5000),
-            'toBlock' => 'latest',
+            'fromBlock' => '0x' . dechex(21514816),
+            'toBlock' => '0x' . dechex(21514816),
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
                 Utils::sha3('AuctionSettled(uint256,uint256,address)'),
