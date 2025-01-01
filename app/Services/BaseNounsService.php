@@ -147,6 +147,8 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
             ],
         ];
 
+        \Log::info('Auction logs filters: ' . json_encode($filters));
+
         $this->web3->eth->getLogs($filters, function ($err, $result) use (&$logs) {
             if ($err) {
                 throw new \Exception($err->getMessage());
