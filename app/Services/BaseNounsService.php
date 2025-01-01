@@ -143,7 +143,8 @@ class BaseNounsService implements ERC721ServiceContract, NounsServiceContract {
             'toBlock' => $blockNumber,
             'address' => $this->auctionHouseContractAddress,
             'topics' => [
-                Utils::sha3('AuctionSettled(uint256,uint256,address)'), // Event signature hash
+                Utils::sha3('AuctionSettled(uint256,uint256,address)'),
+                Utils::sha3('AuctionSettledWithClientId(uint256,uint32)')
             ],
         ];
 
