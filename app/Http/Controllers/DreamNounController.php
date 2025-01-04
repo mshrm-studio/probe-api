@@ -110,7 +110,7 @@ class DreamNounController extends Controller
             $fileName = str_replace(' ', '_', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
             $fileName = preg_replace('/[^\w-]/', '', $fileName);
             $fileExt = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-            $layer = $request->input('layer', 'unknown-layer');
+            $layer = $request->input('custom_trait_layer', 'unknown-layer');
             $directory = "custom-traits/{$layer}";
             $filePath = "{$directory}/{$fileName}.{$fileExt}";
             $i = 1;
