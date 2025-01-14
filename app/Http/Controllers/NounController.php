@@ -80,7 +80,16 @@ class NounController extends Controller
             ->when(is_string($settler), function ($query) use ($settler) {
                 $query->where('settled_by_address', $settler);
             })
-            ->orderBy($sortProperty, $sortMethod)
+            ->when(
+                $sortProperty === 'colorfulness', 
+                function ($query) use ($sortMethod) {
+                    $query
+                        ->selectRaw('*, JSON_LENGTH(color_histogram) as colorfulness')
+                        ->orderBy('colorfulness', $sortMethod);
+                }, function ($query) use ($sortProperty, $sortMethod) {
+                    $query->orderBy($sortProperty, $sortMethod);
+                }
+            )
             ->paginate($perPage);
 
         return NounResource::collection($nouns);
