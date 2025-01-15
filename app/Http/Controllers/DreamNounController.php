@@ -8,6 +8,7 @@ use App\Http\Requests\DreamNoun\UpdateDreamNounRequest;
 use App\Models\DreamNoun;
 use App\Http\Resources\DreamNounResource;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class DreamNounController extends Controller
@@ -101,7 +102,31 @@ class DreamNounController extends Controller
             ]);
         }
 
-        $dreamNoun = DreamNoun::create($request->validated());
+        $data = $request->safe()->except(['custom_trait_image']);
+        $data['custom_trait_image'] = null;
+
+        if ($request->hasFile('custom_trait_image') && $request->file('custom_trait_image')->isValid()) {
+            $file = $request->file('custom_trait_image');
+            $fileName = str_replace(' ', '_', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+            $fileName = preg_replace('/[^\w-]/', '', $fileName);
+            $fileExt = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $layer = $request->input('custom_trait_layer', 'unknown-layer');
+            $directory = "custom-traits/{$layer}";
+            $filePath = "{$directory}/{$fileName}.{$fileExt}";
+            $i = 1;
+    
+            while(Storage::exists($filePath)) {
+                $filePath = "{$directory}/{$fileName}-v{$i}.{$fileExt}";
+                $i++;
+            }
+    
+            Storage::put($filePath, file_get_contents($file), 'public');
+
+            $data['custom_trait_image'] = $filePath;
+            $data["{$layer}_seed_id"] = null;
+        }
+
+        $dreamNoun = DreamNoun::create($data);
 
         return new DreamNounResource($dreamNoun);
     }

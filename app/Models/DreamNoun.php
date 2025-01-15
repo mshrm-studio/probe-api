@@ -14,6 +14,8 @@ class DreamNoun extends Model
         'accessory_seed_id',
         'background_seed_id',
         'body_seed_id',
+        'custom_trait_image',
+        'custom_trait_layer',
         'dreamer',
         'glasses_seed_id',
         'head_seed_id',

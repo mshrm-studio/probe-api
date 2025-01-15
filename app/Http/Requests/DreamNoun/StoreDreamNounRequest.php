@@ -22,9 +22,12 @@ class StoreDreamNounRequest extends FormRequest
      */
     public function rules(): array
     {
+        $customTraitImageProvided = $this->hasFile('custom_trait_image');
+        $customTraitLayer = $this->input('custom_trait_layer');
+
         return [
             'accessory_seed_id' => [
-                'required',
+                Rule::requiredIf(!($customTraitImageProvided && $customTraitLayer === 'accessory')),
                 Rule::exists('noun_traits', 'seed_id')->where(function ($query) {
                     $query->where('layer', 'accessory');
                 }),
@@ -36,10 +39,18 @@ class StoreDreamNounRequest extends FormRequest
                 }),
             ],
             'body_seed_id' => [
-                'required',
+                Rule::requiredIf(!($customTraitImageProvided && $customTraitLayer === 'body')),
                 Rule::exists('noun_traits', 'seed_id')->where(function ($query) {
                     $query->where('layer', 'body');
                 }),
+            ],
+            'custom_trait_image' => [
+                'nullable', 
+                'mimes:png'
+            ],
+            'custom_trait_layer' => [
+                Rule::requiredIf(fn () => $customTraitImageProvided),
+                Rule::in(['body', 'head', 'glasses', 'accessory']),
             ],
             'dreamer' => [
                 'required',
@@ -48,13 +59,13 @@ class StoreDreamNounRequest extends FormRequest
                 'regex:/^0x[a-fA-F0-9]{40}$/',
             ],
             'glasses_seed_id' => [
-                'required',
+                Rule::requiredIf(!($customTraitImageProvided && $customTraitLayer === 'glasses')),
                 Rule::exists('noun_traits', 'seed_id')->where(function ($query) {
                     $query->where('layer', 'glasses');
                 }),
             ],
             'head_seed_id' => [
-                'required',
+                Rule::requiredIf(!($customTraitImageProvided && $customTraitLayer === 'head')),
                 Rule::exists('noun_traits', 'seed_id')->where(function ($query) {
                     $query->where('layer', 'head');
                 }),
