@@ -32,6 +32,9 @@ class NounController extends Controller
         $sortMethod = $request->input('sort_method', 'desc');
 
         $nouns = Noun::query()
+            ->when($select, function ($query) use ($select) {
+                $query->select($select);
+            })
             ->whereNotNull('accessory_name')
             ->whereNotNull('accessory_index')
             ->whereNotNull('block_number')
