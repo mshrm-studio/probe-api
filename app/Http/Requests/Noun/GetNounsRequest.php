@@ -58,6 +58,10 @@ class GetNounsRequest extends FormRequest
                 'string',
                 'max:191'
             ],
+            'select' => [
+                'sometimes',
+                'in:id,token_id'
+            ],
             'settler' => [
                 'sometimes',
                 'string',

@@ -23,6 +23,7 @@ class NounController extends Controller
         $glasses = $request->input('glasses', null);
         $head = $request->input('head', null);
         $background = $request->input('background', null);
+        $select = $request->input('select', null);
         $settler = $request->input('settler', null);
 
         $search = is_string($request->search) ? explode(',', $request->search) : null;
