@@ -9,9 +9,9 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Noun;
-use App\Jobs\Noun\UpdateNounTokenSettler;
+use App\Jobs\Noun\UpdateNounTokenOwner;
 
-class SyncNounTokenSettlers implements ShouldQueue
+class SyncNounTokenOwners implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,14 +29,18 @@ class SyncNounTokenSettlers implements ShouldQueue
     public function handle(): void
     {
         $nouns = Noun::query()
-            ->whereNull('settled_by_address')
-            ->where('minted_at', '<=', now()->subDays(1))
+            // ->where(function ($query) {
+            //     $query
+            //         ->whereNull('owner_address')
+            //         ->orWhereNull('token_id_last_synced_at')
+            //         ->orWhere('token_id_last_synced_at', '<', now()->subDays(3));
+            // })
             ->orderByDesc('id')
-            ->limit(10)
+            ->limit(25)
             ->get();
 
         foreach ($nouns as $noun) {
-            UpdateNounTokenSettler::dispatch($noun)->onQueue('nouns');
+            UpdateNounTokenOwner::dispatch($noun)->onQueue('nouns');
         }
     }
 }
