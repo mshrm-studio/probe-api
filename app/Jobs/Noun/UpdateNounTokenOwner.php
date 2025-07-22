@@ -43,7 +43,7 @@ class UpdateNounTokenOwner implements ShouldQueue
         }
         GRAPHQL;
 
-        $endpoint = 'https://api.thegraph.com/subgraphs/id/' . config('services.nouns.subgraph_id');
+        $endpoint = 'https://gateway.thegraph.com/api/subgraphs/id/' . config('services.nouns.subgraph_id');
 
         $response = Http::withToken(config('services.subgraph.api_key'))->post($endpoint, [
             'query' => $query,
