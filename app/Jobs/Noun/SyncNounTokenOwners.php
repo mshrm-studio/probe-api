@@ -58,6 +58,11 @@ class SyncNounTokenOwners implements ShouldQueue
                 break;
             }
 
+            \Log::info('Response', [
+                'status' => $response->status(),
+                'body' => $response->body(),
+            ]);
+
             $nouns = $response->json('data.nouns');
             if (empty($nouns)) {
                 $hasMore = false;
