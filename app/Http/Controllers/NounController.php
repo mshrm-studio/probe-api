@@ -24,6 +24,7 @@ class NounController extends Controller
         $head = $request->input('head', null);
         $background = $request->input('background', null);
         $select = $request->input('select', null);
+        $owner = $request->input('owner', null);
         $settler = $request->input('settler', null);
 
         $search = is_string($request->search) ? explode(',', $request->search) : null;
@@ -80,6 +81,9 @@ class NounController extends Controller
             })
             ->when(is_string($background), function ($query) use ($background) {
                 $query->where('background_name', $background);
+            })
+            ->when(is_string($owner), function ($query) use ($owner) {
+                $query->where('owner_address', $owner);
             })
             ->when(is_string($settler), function ($query) use ($settler) {
                 $query->where('settled_by_address', $settler);

@@ -76,12 +76,9 @@ class SyncNounTokenOwners implements ShouldQueue
                 $ownerAddress = $noun['owner']['id'] ?? null;
 
                 if (!empty($nounTokenId) && !empty($ownerAddress)) {
-                    // \Log::info("Syncing owner for Noun Token ID: $nounTokenId, Owner Address: $ownerAddress");
+                    \Log::info("Syncing owner for Noun Token ID: $nounTokenId, Owner Address: $ownerAddress");
 
-                    Noun::query()
-                        ->where('token_id', $nounTokenId)
-                        ->where('owner_address', '!=', $ownerAddress)
-                        ->update(['owner_address' => $ownerAddress]);
+                    Noun::where('token_id', $nounTokenId)->update(['owner_address' => $ownerAddress]);
                 }
             }
 
