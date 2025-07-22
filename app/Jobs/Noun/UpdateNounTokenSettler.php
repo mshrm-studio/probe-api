@@ -30,9 +30,7 @@ class UpdateNounTokenSettler implements ShouldQueue
      * Execute the job.
      */
     public function handle(NounsService $service): void
-    {
-        \Log::info('Updating token settler for noun token ' . $this->noun->token_id);
-        
+    {       
         $noun = Noun::findOrFail($this->noun->id);
 
         // Ensure required fields exist
@@ -43,8 +41,6 @@ class UpdateNounTokenSettler implements ShouldQueue
         try {
             // Fetch logs for this block
             $logs = $service->getAuctionLogs($noun->block_number);
-
-            \Log::info('Auction logs: ' . json_encode($logs));
 
             // Example Auction logs: [
             //     {
@@ -83,14 +79,9 @@ class UpdateNounTokenSettler implements ShouldQueue
                 // tx hashes assumed to be the same for all logs.
                 // Convert stdClass to array
 
-                \Log::info('Auction event: ' . json_encode($auctionEvent));
-
                 if ($auctionEvent && isset($auctionEvent['transactionHash'])) {
-                    \Log::info('Transaction hash: ' . $auctionEvent['transactionHash']);
                     // Get transaction details
                     $transaction = $service->getTransaction($auctionEvent['transactionHash']);
-
-                    \Log::info('Transaction details: ' . json_encode($transaction));
 
                     if (isset($transaction['from'])) {
                         // Update settled address

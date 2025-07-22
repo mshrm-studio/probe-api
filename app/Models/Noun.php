@@ -30,6 +30,7 @@ class Noun extends Model
         'head_name',
         'index',
         'minted_at',
+        'owner_address',
         'png_path',
         'settled_by_address',
         'svg_path',
