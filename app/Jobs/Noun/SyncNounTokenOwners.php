@@ -64,12 +64,14 @@ class SyncNounTokenOwners implements ShouldQueue
                 break;
             }
 
+            \Log::info('Number of nouns fetched: ' . count($nouns));
+
             foreach ($nouns as $noun) {
                 $nounTokenId = $noun['id'] ?? null;
                 $ownerAddress = $noun['owner']['id'] ?? null;
 
                 if (!empty($nounTokenId) && !empty($ownerAddress)) {
-                    \Log::info("Syncing owner for Noun Token ID: $nounTokenId, Owner Address: $ownerAddress");
+                    // \Log::info("Syncing owner for Noun Token ID: $nounTokenId, Owner Address: $ownerAddress");
 
                     Noun::query()
                         ->where('token_id', $nounTokenId)
