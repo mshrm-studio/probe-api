@@ -26,7 +26,10 @@ class UpdateNounTokenOwner implements ShouldQueue
      * Execute the job.
      */
     public function handle(): void
-    {       
+    {     
+        \Log::info('Updating Noun Token Owner', [
+            'noun_id' => $this->noun->id,
+        ]);  
         // TODO
 
         $query = <<<'GRAPHQL'
@@ -46,6 +49,9 @@ class UpdateNounTokenOwner implements ShouldQueue
             'query' => $query,
         ]);
 
-        dd($response);
+        \Log::info('GraphQL Response', [
+            'status' => $response->status(),
+            'body' => $response->body(),
+        ]);
     }
 }

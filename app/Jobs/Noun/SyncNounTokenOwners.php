@@ -28,13 +28,14 @@ class SyncNounTokenOwners implements ShouldQueue
      */
     public function handle(): void
     {
-        $nouns = Noun::query()
-            // ->where(function ($query) {
+        // ->where(function ($query) {
             //     $query
             //         ->whereNull('owner_address')
             //         ->orWhereNull('token_id_last_synced_at')
             //         ->orWhere('token_id_last_synced_at', '<', now()->subDays(3));
             // })
+            
+        $nouns = Noun::query()
             ->orderByDesc('id')
             ->limit(25)
             ->get();
