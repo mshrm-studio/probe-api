@@ -6,6 +6,7 @@ use App\Http\Controllers\Actions\GetLilNounByTokenId;
 use App\Http\Controllers\Actions\GetLilNounColors;
 use App\Http\Controllers\Actions\GetNounByTokenId;
 use App\Http\Controllers\Actions\GetNounColors;
+use App\Http\Controllers\Actions\GetNounOwners;
 use App\Http\Controllers\Actions\GetNounSettlers;
 use App\Http\Controllers\Actions\WarpcastFrames\NextNoun;
 use App\Http\Controllers\Actions\WarpcastFrames\NounsCatalogue;
@@ -36,6 +37,7 @@ Route::get('lil-noun-traits', [LilNounTraitController::class, 'index']);
 Route::get('nouns', [NounController::class, 'index']);
 Route::get('nouns/{token_id}', GetNounByTokenId::class);
 Route::get('noun-colors', GetNounColors::class);
+Route::get('noun-owners', GetNounOwners::class);
 Route::get('noun-settlers', GetNounSettlers::class);
 Route::get('noun-traits', [NounTraitController::class, 'index']);
 
