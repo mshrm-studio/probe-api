@@ -67,6 +67,11 @@ class GetNounsRequest extends FormRequest
                 'string',
                 'max:191'
             ],
+            'owner' => [
+                'sometimes',
+                'string',
+                'max:191'
+            ],
             'sort_property' => [
                 'sometimes',
                 'in:colorfulness,minted_at,token_id,weight,area',
