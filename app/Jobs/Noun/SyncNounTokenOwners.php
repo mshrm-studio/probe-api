@@ -28,7 +28,6 @@ class SyncNounTokenOwners implements ShouldQueue
      */
     public function handle(): void
     {
-        $start = microtime(true);
         $hasMore = true;
         $skip = 0;
         $limit = 1000;
@@ -58,27 +57,25 @@ class SyncNounTokenOwners implements ShouldQueue
                 break;
             }
 
-            \Log::info('Response', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
-
             $nouns = $response->json('data.nouns');
+            
             if (empty($nouns)) {
                 $hasMore = false;
                 break;
             }
-
-            \Log::info('Number of nouns fetched: ' . count($nouns));
 
             foreach ($nouns as $noun) {
                 $nounTokenId = $noun['id'] ?? null;
                 $ownerAddress = $noun['owner']['id'] ?? null;
 
                 if (!empty($nounTokenId) && !empty($ownerAddress)) {
-                    \Log::info("Syncing owner for Noun Token ID: $nounTokenId, Owner Address: $ownerAddress");
+                    $nounToUpdate = Noun::where('token_id', $nounTokenId)->first();
 
-                    Noun::where('token_id', $nounTokenId)->update(['owner_address' => $ownerAddress]);
+                    if (!empty($nounToUpdate) && empty($nounToUpdate->owner_address)) {
+                        $nounToUpdate->update([
+                            'owner_address' => $ownerAddress,
+                        ]);
+                    }
                 }
             }
 
@@ -88,8 +85,5 @@ class SyncNounTokenOwners implements ShouldQueue
                 $skip += $limit;
             }
         }
-
-        $elapsed = microtime(true) - $start;
-        \Log::info("SyncNounTokenOwners completed in {$elapsed} seconds");
     }
 }

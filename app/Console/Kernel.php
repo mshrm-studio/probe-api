@@ -75,7 +75,7 @@ class Kernel extends ConsoleKernel
             // $schedule->job(new SyncNounTokenMintTimes, 'nouns')->hourly();
             // $schedule->job(new SyncNounTokenColors, 'nouns')->hourly();
             // $schedule->job(new SyncNounTokenSettlers, 'nouns')->hourly();
-            $schedule->job(new SyncNounTokenOwners, 'nouns')->everyMinute();
+            // $schedule->job(new SyncNounTokenOwners, 'nouns')->everyMinute();
 
             // $schedule->job(new SyncNounTraitImages, 'nouns')->hourly();
         }
@@ -99,7 +99,7 @@ class Kernel extends ConsoleKernel
             $schedule->job(new SyncNounTokenMintTimes, 'nouns')->everyTenMinutes();
             $schedule->job(new SyncNounTokenColors, 'nouns')->everyTenMinutes();
             $schedule->job(new SyncNounTokenSettlers, 'nouns')->everyTenMinutes();
-            $schedule->job(new SyncNounTokenOwners, 'nouns')->everyTenMinutes();
+            $schedule->job(new SyncNounTokenOwners, 'nouns')->daily();
 
             // $schedule->job(new SyncNounTraitImages, 'nouns')->everyMinute();
         }
