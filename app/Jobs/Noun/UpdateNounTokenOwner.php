@@ -27,29 +27,56 @@ class UpdateNounTokenOwner implements ShouldQueue
      */
     public function handle(): void
     {
-        // TODO
+        $hasMore = true;
+        $skip = 0;
+        $limit = 1000;
+        
+        $apiKey = config('services.subgraph.api_key');
+        $subgraphId = config('services.nouns.subgraph_id');
+        $endpoint = 'https://gateway.thegraph.com/api/subgraphs/id/' . $subgraphId;
 
-        $query = <<<'GRAPHQL'
-        {
-            nouns(first: 1000) {
-                id
-                owner {
+        while ($hasMore) {
+            $query = <<<GRAPHQL
+            {
+                nouns(first: $limit, skip: $skip) {
                     id
+                    owner {
+                        id
+                    }
                 }
             }
+            GRAPHQL;
+
+            $response = Http::withToken($apiKey)->post($endpoint, [
+                'query' => $query,
+            ]);
+
+            if (!$response->ok()) {
+                throw new \Exception("GraphQL request failed with status {$response->status()} at skip $skip.");
+                break;
+            }
+
+            $nouns = $response->json('data.nouns');
+            if (empty($nouns)) {
+                $hasMore = false;
+                break;
+            }
+
+            foreach ($nouns as $noun) {
+                $nounId = $noun['id'];
+                $ownerId = $noun['owner']['id'] ?? null;
+
+                \Log::info("Noun owner", [
+                    'noun_id' => $nounId,
+                    'owner_id' => $ownerId,
+                ]);
+            }
+
+            if (count($data) < $limit) {
+                $hasMore = false;
+            } else {
+                $skip += $limit;
+            }
         }
-        GRAPHQL;
-
-        $endpoint = 'https://gateway.thegraph.com/api/subgraphs/id/' . config('services.nouns.subgraph_id');
-
-        $response = Http::withToken(config('services.subgraph.api_key'))->post($endpoint, [
-            'query' => $query,
-        ]);
-
-        \Log::info('GraphQL Response', [
-            'noun_id' => $this->noun->id,
-            'status' => $response->status(),
-            'body' => $response->body(),
-        ]);
     }
 }
