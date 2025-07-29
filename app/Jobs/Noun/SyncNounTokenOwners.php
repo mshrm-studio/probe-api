@@ -82,7 +82,7 @@ class SyncNounTokenOwners implements ShouldQueue
                 $nounTokenId = $noun['id'] ?? null;
                 $ownerAddress = $noun['owner']['id'] ?? null;
 
-                if (!empty($nounTokenId) && !empty($ownerAddress)) {
+                if ($nounTokenId !== null && !empty($ownerAddress)) {
                     $nounToUpdate = Noun::where('token_id', $nounTokenId)->first();
 
                     if (!empty($nounToUpdate)) {
