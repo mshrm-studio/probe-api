@@ -28,21 +28,21 @@ class SyncNounTokenOwners implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info("Starting SyncNounTokenOwners job...");
+        // \Log::info("Starting SyncNounTokenOwners job...");
 
         $hasMore = true;
         $skip = 0;
         $limit = 1000;
 
-        $totalProcessed = 0;
-        $totalUpdated = 0;
+        // $totalProcessed = 0;
+        // $totalUpdated = 0;
         
         $apiKey = config('services.subgraph.api_key');
         $subgraphId = config('services.nouns.subgraph_id');
         $endpoint = 'https://gateway.thegraph.com/api/subgraphs/id/' . $subgraphId;
 
         while ($hasMore) {
-            \Log::info("Fetching nouns batch: skip=$skip, limit=$limit");
+            // \Log::info("Fetching nouns batch: skip=$skip, limit=$limit");
 
             $query = <<<GRAPHQL
             {
@@ -69,7 +69,7 @@ class SyncNounTokenOwners implements ShouldQueue
 
             $batchCount = is_array($nouns) ? count($nouns) : 0;
 
-            \Log::info("Fetched $batchCount nouns.");
+            // \Log::info("Fetched $batchCount nouns.");
             
             if (empty($nouns)) {
                 \Log::warning("No nouns returned for skip $skip. Exiting loop.");
@@ -78,7 +78,7 @@ class SyncNounTokenOwners implements ShouldQueue
             }
 
             foreach ($nouns as $noun) {
-                $totalProcessed++;
+                // $totalProcessed++;
                 $nounTokenId = $noun['id'] ?? null;
                 $ownerAddress = $noun['owner']['id'] ?? null;
 
@@ -87,7 +87,7 @@ class SyncNounTokenOwners implements ShouldQueue
 
                     if (!empty($nounToUpdate)) {
                         if ($nounToUpdate->owner_address !== $ownerAddress) {
-                            $totalUpdated++;
+                            // $totalUpdated++;
 
                             $nounToUpdate->update([
                                 'owner_address' => $ownerAddress,
@@ -102,13 +102,13 @@ class SyncNounTokenOwners implements ShouldQueue
             }
 
             if (count($nouns) < $limit) {
-                \Log::info("Last batch received. Exiting pagination.");
+                // \Log::info("Last batch received. Exiting pagination.");
                 $hasMore = false;
             } else {
                 $skip += $limit;
             }
         }
 
-        \Log::info("SyncNounTokenOwners job finished. Processed: $totalProcessed, Updated: $totalUpdated.");
+        // \Log::info("SyncNounTokenOwners job finished. Processed: $totalProcessed, Updated: $totalUpdated.");
     }
 }
